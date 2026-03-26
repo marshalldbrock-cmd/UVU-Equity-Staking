@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spanish Fork — Development Pro Forma</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #f5f2ee;
+  --surface:  #ffffff;
+  --surface2: #f0ece6;
+  --border:   #ddd8d0;
+  --ink:      #1a1714;
+  --ink2:     #4a4540;
+  --muted:    #8a8278;
+  --green:    #1a7a4a;
+  --green-bg: #e8f5ee;
+  --red:      #b83232;
+  --red-bg:   #fdf0f0;
+  --amber:    #b86b00;
+  --amber-bg: #fff8ee;
+  --blue:     #1a5fa8;
+  --blue-bg:  #eef4fd;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* HEADER */
+header {
+  background: var(--ink);
+  color: #fff;
+  padding: 20px 32px;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.proj-name { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+.proj-sub { font-size: 13px; color: #94908a; font-family: 'DM Mono', monospace; }
+
+/* LAYOUT */
+.wrap { max-width: 1140px; margin: 0 auto; padding: 28px 24px; }
+.main-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+
+/* PANELS */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.panel-head {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface2);
+  font-family: 'DM Mono', monospace;
+}
+.panel-body { padding: 18px; }
+
+/* INPUTS */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  margin-bottom: 5px;
+}
+.input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.input-wrap:focus-within { border-color: var(--blue); }
+.affix {
+  padding: 0 10px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  background: var(--surface2);
+  border-right: 1px solid var(--border);
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+.affix.right {
+  border-right: none;
+  border-left: 1px solid var(--border);
+}
+input[type="number"], input[type="text"] {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+}
+
+/* SLIDER */
+.slider-field { margin-bottom: 16px; }
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.slider-label { font-size: 12px; font-weight: 600; color: var(--ink2); }
+.slider-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue);
+}
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--blue);
+  height: 4px;
+  cursor: pointer;
+}
+
+/* SECTION LABEL */
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin: 20px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.section-label:first-child { margin-top: 0; }
+
+/* KPI STRIP */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.kpi-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; }
+.kpi-val {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: -0.5px;
+}
+.kpi-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.kpi.green { background: var(--green-bg); border-color: #b8ddc8; }
+.kpi.green .kpi-val { color: var(--green); }
+.kpi.red { background: var(--red-bg); border-color: #f0c8c8; }
+.kpi.red .kpi-val { color: var(--red); }
+.kpi.amber { background: var(--amber-bg); border-color: #f0d8a8; }
+.kpi.amber .kpi-val { color: var(--amber); }
+.kpi.blue { background: var(--blue-bg); border-color: #b8d0f0; }
+.kpi.blue .kpi-val { color: var(--blue); }
+
+/* COST TABLE */
+.cost-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cost-table th {
+  padding: 8px 14px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.cost-table th:last-child { text-align: right; }
+.cost-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid #f0ece6;
+  color: var(--ink2);
+}
+.cost-table td:last-child {
+  text-align: right;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  color: var(--ink);
+}
+.cost-table tr.category td {
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--surface2);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+}
+.cost-table tr.total td {
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--ink);
+  color: #fff;
+  border-bottom: none;
+}
+.cost-table tr.total td:last-child {
+  color: #7dd3a8;
+  font-size: 16px;
+}
+.cost-table tr.subtotal td {
+  font-weight: 700;
+  background: var(--surface2);
+  border-top: 2px solid var(--border);
+  color: var(--ink);
+}
+.cost-table tr:hover td { background: #faf8f5; }
+.cost-table tr.category:hover td,
+.cost-table tr.total:hover td,
+.cost-table tr.subtotal:hover td { background: inherit; }
+
+.note-cell { color: var(--muted) !important; font-size: 11px !important; }
+
+/* PITI GRID */
+.piti-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+.piti-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.piti-head { padding: 12px 16px; font-weight: 700; font-size: 12px; }
+.piti-total { font-size: 20px; font-weight: 700; font-family: 'DM Mono', monospace; padding: 0 16px 12px; }
+.piti-rows { border-top: 1px solid var(--border); }
+.piti-row { display: flex; justify-content: space-between; padding: 7px 16px; border-bottom: 1px solid #f5f2ee; font-size: 12px; }
+.piti-row .pk { color: var(--muted); }
+.piti-row .pv { font-family: 'DM Mono', monospace; font-weight: 500; }
+
+/* AFFORD TABLE */
+.afford-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.afford-table th { padding: 8px 14px; text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); background: var(--surface2); border-bottom: 1px solid var(--border); }
+.afford-table td { padding: 9px 14px; border-bottom: 1px solid #f0ece6; font-family: 'DM Mono', monospace; }
+.afford-table .yes { color: var(--green); font-weight: 700; }
+.afford-table .gap { color: var(--red); font-weight: 700; }
+.afford-table .close { color: var(--amber); font-weight: 700; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+/* TAG */
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; }
+.tag-green { background: var(--green-bg); color: var(--green); }
+.tag-red { background: var(--red-bg); color: var(--red); }
+.tag-amber { background: var(--amber-bg); color: var(--amber); }
+
+@media (max-width: 900px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .kpi-strip { grid-template-columns: repeat(2,1fr); }
+  .piti-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="proj-name">Halvorsen Ridge</div>
+  <div class="proj-sub">Spanish Fork, UT · Development Pro Forma</div>
+</header>
+
+<div class="wrap">
+  <div class="main-grid">
+
+    <!-- LEFT: INPUTS -->
+    <div>
+      <div class="panel">
+        <div class="panel-head">Project Assumptions</div>
+        <div class="panel-body">
+
+          <div class="section-label">Scale</div>
+          <div class="field">
+            <label>Total Units</label>
+            <div class="input-wrap">
+              <input type="number" id="units" value="104" min="1" max="500" oninput="recalc()">
+            </div>
+          </div>
+          <div class="slider-field">
+            <div class="slider-label-row">
+              <span class="slider-label">Units (drag)</span>
+              <span class="slider-val" id="unitsSliderVal">104</span>
+            </div>
+            <input type="range" id="unitsSlider" min="50" max="300" value="104"
+              oninput="document.getElementById('units').value=this.value; document.getElementById('unitsSliderVal').textContent=this.value; recalc()">
+          </div>
+
+          <div class="section-label">Sale Price</div>
+          <div class="field">
+            <label>Sale Price per Unit</label>
+            <div class="input-wrap">
+              <span class="affix">$</span>
+              <input type="number" id="salePrice" value="420000" oninput="recalc()">
+            </div>
+          </div>
+
+          <div class="section-label">Construction Costs (per unit)</div>
+          <div class="field">
+            <label>Vertical Construction</label>
+            <div class="input-wrap">
+              <span class="affix">$</span>
+              <input type="number" id="verticalCost" value="185000" oninput="recalc()">
+            </div>
+          </div>
+          <div class="field">
+            <label>Horizontal Development</label>
+            <div class="input-wrap">
+              <span class="affix">$</span>
+              <input type="number" id="horizontalCost" value="28000" oninput="recalc()">
+            </div>
+          </div>
+
+          <div class="section-label">Land (project total)</div>
+          <div class="field">
+            <label>Land Cost (total project)</label>
+            <div class="input-wrap">
+              <span class="affix">$</span>
+              <input type="number" id="landTotal" value="5000000" oninput="recalc()">
+            </div>
+          </div>
+
+          <div class="section-label">Financing</div>
+          <div class="field">
+            <label>Construction Loan Rate</label>
+            <div class="input-wrap">
+              <input type="number" id="constRate" value="8.5" step="0.25" oninput="recalc()">
+              <span class="affix right">%</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Construction Period (months)</label>
+            <div class="input-wrap">
+              <input type="number" id="constMonths" value="18" oninput="recalc()">
+            </div>
+          </div>
+          <div class="field">
+            <label>LTV (loan-to-cost)</label>
+            <div class="input-wrap">
+              <input type="number" id="ltv" value="65" oninput="recalc()">
+              <span class="affix right">%</span>
+            </div>
+          </div>
+
+          <div class="section-label">H4U Silent Second Lien</div>
+          <div class="slider-field">
+            <div class="slider-label-row">
+              <span class="slider-label">Silent Second Amount</span>
+              <span class="slider-val" id="ssSliderVal">$75,000</span>
+            </div>
+            <input type="range" id="silentSecond" min="75000" max="100000" step="1000" value="75000"
+              oninput="el('ssSliderVal').textContent='$'+(+this.value).toLocaleString(); recalc()">
+            <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace">
+              <span>$75,000</span><span>$100,000</span>
+            </div>
+          </div>
+          <div style="background:#eef4fd;border:1px solid #b8d0f0;border-radius:7px;padding:10px 12px;font-size:12px;color:#1a5fa8;margin-bottom:14px">
+            H4U funded � 0% interest � due on sale or refi � subordinated to first mortgage
+          </div>
+
+          <div class="section-label">Takeout Mortgage</div>
+          <div class="field">
+            <label>Buyer Mortgage Rate</label>
+            <div class="input-wrap">
+              <input type="number" id="mortgageRate" value="6.75" step="0.125" oninput="recalc()">
+              <span class="affix right">%</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Down Payment</label>
+            <div class="input-wrap">
+              <input type="number" id="downPct" value="5" oninput="recalc()">
+              <span class="affix right">%</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Property Tax Rate</label>
+            <div class="input-wrap">
+              <input type="number" id="taxRate" value="0.65" step="0.05" oninput="recalc()">
+              <span class="affix right">%</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: OUTPUTS -->
+    <div>
+
+      <!-- KPI STRIP -->
+      <div class="kpi-strip">
+        <div class="kpi blue">
+          <div class="kpi-label">Total Project Cost</div>
+          <div class="kpi-val" id="kpi-totalCost">—</div>
+          <div class="kpi-sub" id="kpi-totalCostPerUnit">per unit</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-label">Total Revenue</div>
+          <div class="kpi-val" id="kpi-revenue">—</div>
+          <div class="kpi-sub" id="kpi-revenuePerUnit">per unit</div>
+        </div>
+        <div class="kpi" id="kpi-profit-card">
+          <div class="kpi-label">Net Profit / Loss</div>
+          <div class="kpi-val" id="kpi-profit">—</div>
+          <div class="kpi-sub" id="kpi-margin">margin</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Buyer PITI (w/ Silent Second)</div>
+          <div class="kpi-val" id="kpi-piti">—</div>
+          <div class="kpi-sub" id="kpi-income-req">income required</div>
+        </div>
+      </div>
+
+      <!-- CARRY SAVINGS BANNER -->
+      <div id="carry-banner" style="display:none;margin-bottom:16px;background:#e8f5ee;border:1px solid #b8ddc8;border-radius:10px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-weight:700;color:#1a7a4a;font-size:14px">Deferral Carry Savings</div>
+          <div style="color:#4a8a6a;font-size:12px;margin-top:2px">Cost eliminated by pushing fees to closing instead of paying upfront</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:22px;color:#1a7a4a" id="carry-savings-total">—</div>
+          <div style="font-size:11px;color:#4a8a6a" id="carry-savings-per-unit">per unit</div>
+        </div>
+      </div>
+
+      <!-- COST BREAKDOWN TABLE -->
+      <div class="panel" style="margin-bottom:20px">
+        <div class="panel-head" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Cost Stack — Per Unit &amp; Project Total</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:400">Toggle timing to model carry savings</span>
+        </div>
+        <table class="cost-table">
+          <thead>
+            <tr>
+              <th>Line Item</th>
+              <th style="text-align:center">Timing</th>
+              <th style="text-align:right">Per Unit</th>
+              <th style="text-align:right">Carry Cost</th>
+              <th style="text-align:right">Project Total</th>
+            </tr>
+          </thead>
+          <tbody id="cost-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- SILENT SECOND IMPACT BANNER -->
+      <div id="ss-banner" style="margin-bottom:16px;background:#eef4fd;border:1px solid #b8d0f0;border-radius:10px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-weight:700;color:#1a5fa8;font-size:14px">H4U Silent Second Impact</div>
+          <div style="color:#4a6a8a;font-size:12px;margin-top:2px">0% · subordinated · due on sale or refi</div>
+        </div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap">
+          <div style="text-align:center">
+            <div style="font-size:11px;color:#4a6a8a;margin-bottom:2px">First Mortgage</div>
+            <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:18px;color:#1a5fa8" id="ss-first-mortgage">—</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:#4a6a8a;margin-bottom:2px">Monthly Savings</div>
+            <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:18px;color:#1a7a4a" id="ss-monthly-savings">—</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:#4a6a8a;margin-bottom:2px">Income Required</div>
+            <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:18px;color:#1a5fa8" id="ss-income-req">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PITI -->
+      <div class="panel" style="margin-bottom:20px">
+        <div class="panel-head">Buyer Payment Analysis</div>
+        <div class="panel-body">
+          <div class="piti-grid" id="piti-grid"></div>
+        </div>
+      </div>
+
+      <!-- AFFORDABILITY -->
+      <div class="panel">
+        <div class="panel-head">Affordability by Household Income</div>
+        <table class="afford-table">
+          <thead>
+            <tr>
+              <th>Household Income</th>
+              <th>Max Affordable</th>
+              <th>No Silent Second</th>
+              <th>With Silent Second</th>
+              <th>PITI (w/ SS)</th>
+            </tr>
+          </thead>
+          <tbody id="afford-tbody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+const el   = id => document.getElementById(id);
+const val  = id => parseFloat(el(id).value) || 0;
+const fmt  = n  => '$' + Math.round(n).toLocaleString();
+const pct  = n  => (n * 100).toFixed(1) + '%';
+const chkd = id => { const e = el(id); return e ? e.checked : false; };
+
+// ── DEFERRAL STATE ────────────────────────────────────────────────────────────
+// true = paid at closing (deferred), false = paid upfront (adds carry cost)
+const DEFER = {
+  land:         true,   // RDA land deferred by default
+  impactFees:   true,   // city can defer to closing
+  permitFees:   false,  // typically must pay at permit
+  entitlement:  false,  // must pay upfront (surveyors, attorneys)
+  horizontal:   false,  // construction — must pay as built
+  vertical:     false,  // construction — must pay as built
+  marketing:    true,   // paid at closing
+  realtor:      true,   // paid at closing
+};
+
+function toggleDefer(key) {
+  DEFER[key] = !DEFER[key];
+  recalc();
+}
+
+// ── SPANISH FORK FIXED COSTS (project-level, divide by units) ────────────────
+// Source: Building_Cost_Sheet_Spanish_Fork.csv
+const FIXED_PROJECT_COSTS = {
+  // Entitlement / Due Diligence (project total)
+  altaSurvey:          5000,
+  marketStudy:         5000,
+  surveyTableA:         500,
+  topoSurvey:          2000,
+  boundarySurvey:       800,
+  phaseIESA:           2500,
+  phaseIIESA:          7500,
+  wetlandDelineation:  1500,
+  streamDetermination: 2500,
+  floodplainStudy:     5000,
+  geotechSoil:         2500,
+  geotechInfiltration: 1500,
+  cutFillAnalysis:     2000,
+  trafficImpactStudy:  8000,
+  // Entitlement fees (city)
+  annexationPetition:  1440,
+  zoneChange:           420,
+  prelimPlatReview:    2780,
+  hydrantFlowTest:      400,
+  feasibilityConsult:  3000,
+  docPrinting:          250,
+  rezoneNarrative:     3000,
+  neighborhoodMeeting: 1050,
+  attorneyHearing:     4000,
+  devAgreement:        2000,
+  cityAttorneyExtra:   1000,
+  civilEngineerBase:  17500,
+  appealsAuthority:     420,
+  conditionalUse:       420,
+  finalPlatReview:     2415,
+  generalPlan:          420,
+  minorPlatAmendment:   600,
+  siteplanReview:      3625,
+  zoneVerification:      50,
+  // Construction admin (project-level)
+  materialsTesting:    5000,
+  electricalHookup:    1000,
+  waterMeter:          1500,
+  tempConstructPower:   500,
+  tempWaterMeter:       800,
+  encroachPermit:       100,
+  loanUnderwriting:    5000,
+  appraisalFee:        3000,
+  liabilityInsurance:  2000,
+  accounting:          2500,
+  hoaSetup:            6500,
+  propertyTaxes:       3800,
+  siteSecurity:        8600,
+};
+
+// Per-unit fixed fees (charged per lot by city)
+const PER_UNIT_CITY_FEES = {
+  finalPlatPerLot:      122,   // $122/lot
+  minorSubdivision:     600,   // $600/lot (this one is likely a city error in CSV but using as-is)
+  prelimPlatPerLot:      71,   // $71/lot
+  constructionDeposit: 1500,   // $1,500/unit
+};
+
+// Impact fees per unit (Spanish Fork, from CSV)
+const IMPACT_FEES = {
+  powerLight:       2136.90,
+  stormWater:       1253.21,
+  drinkingWater:    2260.50,
+  pressurizedIrrig: 1588.06,
+  wastewater:       5763.51,
+  publicSafety:     1106.29,
+  transportation:   1992.92,
+  parksTrails:      4896.00,
+};
+const BUILDING_PERMIT_PER_UNIT = 5836.77; // permit + hookup per unit
+
+// Percentage-based costs (applied to project cost basis)
+const PCT_COSTS = {
+  contingency:      0.15,   // 15% of hard costs
+  projectMgmt:      0.04,   // 4% of project cost
+  marketing:        0.03,   // 3% of sale price
+  realtorCommission:0.03,   // 3% of sale price
+  loanOrigination:  0.01,   // 1% of loan amount
+};
+
+// ── PITI CALC ────────────────────────────────────────────────────────────────
+function pitiCalc(price, ratePct, dpPct, taxRatePct) {
+  const dp   = price * (dpPct / 100);
+  const loan = price - dp;
+  const mr   = ratePct / 100 / 12;
+  const n    = 360;
+  const pi   = mr === 0 ? loan/n : loan * (mr * Math.pow(1+mr,n)) / (Math.pow(1+mr,n)-1);
+  const taxes = price * (taxRatePct/100) / 12;
+  const ins   = price * 0.005 / 12;   // ~0.5% insurance
+  const pmi   = dpPct < 20 ? loan * 0.0085 / 12 : 0;
+  return { pi, taxes, ins, pmi, total: pi+taxes+ins+pmi, loan, dp };
+}
+
+function maxAffordable(income, ratePct, dpPct, taxRatePct) {
+  const mb = income * 0.28 / 12; // 28% front-end DTI
+  const r  = ratePct / 100 / 12;
+  const n  = 360;
+  const piCoeff  = r === 0 ? 1/n : r * Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  const taxCoeff = (taxRatePct/100)/12;
+  const insCoeff = 0.005/12;
+  const pmiCoeff = dpPct < 20 ? 0.0085*(1-dpPct/100)/12 : 0;
+  return mb / (piCoeff*(1-dpPct/100) + taxCoeff + insCoeff + pmiCoeff*(1-dpPct/100));
+}
+
+// ── CARRY COST HELPER ─────────────────────────────────────────────────────────
+// How much does it cost to finance $1 of upfront cost through construction?
+function carryPerDollar(constRate, constMonths, ltv) {
+  return (ltv / 100) * (constRate / 100) * (constMonths / 12);
+}
+
+// ── TIMING BADGE HTML ─────────────────────────────────────────────────────────
+function timingBadge(key, canToggle) {
+  const deferred = DEFER[key];
+  if (!canToggle) {
+    // Fixed timing — no toggle
+    return deferred
+      ? `<span style="background:#e8f5ee;color:#1a7a4a;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace">AT CLOSING</span>`
+      : `<span style="background:#fdf0f0;color:#b83232;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace">UPFRONT</span>`;
+  }
+  return deferred
+    ? `<button onclick="toggleDefer('${key}')" style="background:#e8f5ee;color:#1a7a4a;border:1px solid #b8ddc8;padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;font-family:'DM Mono',monospace;cursor:pointer" title="Click to make upfront">AT CLOSING ↕</button>`
+    : `<button onclick="toggleDefer('${key}')" style="background:#fdf0f0;color:#b83232;border:1px solid #f0c8c8;padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;font-family:'DM Mono',monospace;cursor:pointer" title="Click to defer to closing">UPFRONT ↕</button>`;
+}
+
+// ── MAIN RECALC ───────────────────────────────────────────────────────────────
+function recalc() {
+  // Sync slider
+  el('unitsSlider').value          = val('units');
+  el('unitsSliderVal').textContent = val('units');
+
+  const units        = Math.max(1, val('units'));
+  const salePrice    = val('salePrice');
+  const vertPerUnit  = val('verticalCost');
+  const horizPerUnit = val('horizontalCost');
+  const landTotalAmt = val('landTotal');
+  const constRate    = val('constRate');
+  const constMonths  = val('constMonths');
+  const ltv          = val('ltv');
+  const mortgageRate = val('mortgageRate');
+  const downPct      = val('downPct');
+  const taxRate      = val('taxRate');
+
+  const cpd = carryPerDollar(constRate, constMonths, ltv); // carry cost per $1 upfront
+
+  // ── LAND ──
+  const landPerUnit   = landTotalAmt / units;
+  const landCarry     = DEFER.land ? 0 : landPerUnit * cpd;
+
+  // ── FIXED ENTITLEMENT COSTS (always upfront) ──
+  const fixedProjectTotal = Object.values(FIXED_PROJECT_COSTS).reduce((a,b)=>a+b,0);
+  const fixedPerUnit      = fixedProjectTotal / units;
+  const fixedCarry        = fixedPerUnit * cpd; // always upfront, always carries
+
+  // ── PER-UNIT CITY FEES (always upfront) ──
+  const perUnitCityFees = Object.values(PER_UNIT_CITY_FEES).reduce((a,b)=>a+b,0);
+  const cityFeesCarry   = perUnitCityFees * cpd;
+
+  // ── IMPACT FEES ──
+  const impactFeePerUnit = Object.values(IMPACT_FEES).reduce((a,b)=>a+b,0);
+  const impactCarry      = DEFER.impactFees ? 0 : impactFeePerUnit * cpd;
+
+  // ── PERMIT FEES ──
+  const permitCarry = DEFER.permitFees ? 0 : BUILDING_PERMIT_PER_UNIT * cpd;
+
+  // ── CONSTRUCTION (always upfront — you can't defer paying your builder) ──
+  const vertCarry  = vertPerUnit  * cpd;
+  const horizCarry = horizPerUnit * cpd;
+
+  // ── TOTAL CARRY on upfront items ──
+  const totalCarryPerUnit = landCarry + fixedCarry + cityFeesCarry
+                          + impactCarry + permitCarry + vertCarry + horizCarry;
+
+  // ── CARRY SAVINGS vs. all-upfront baseline ──
+  const allUpfrontCarry = (landPerUnit + impactFeePerUnit + BUILDING_PERMIT_PER_UNIT) * cpd;
+  const carrySavingsPerUnit = allUpfrontCarry - (landCarry + impactCarry + permitCarry);
+
+  // ── HARD COSTS ──
+  const hardCostPerUnit = landPerUnit + horizPerUnit + vertPerUnit
+                        + impactFeePerUnit + BUILDING_PERMIT_PER_UNIT + perUnitCityFees;
+
+  // ── SOFT COSTS ──
+  const loanBase         = hardCostPerUnit * units * (ltv/100);
+  const loanOrigPerUnit  = (loanBase / units) * PCT_COSTS.loanOrigination;
+  const softCostPerUnit  = fixedPerUnit + totalCarryPerUnit + loanOrigPerUnit;
+
+  // ── SUBTOTAL ──
+  const subtotalPerUnit = hardCostPerUnit + softCostPerUnit;
+
+  // ── PCT-BASED COSTS ──
+  const contingencyPerUnit = subtotalPerUnit * PCT_COSTS.contingency;
+  const projectMgmtPerUnit = subtotalPerUnit * PCT_COSTS.projectMgmt;
+  const marketingPerUnit   = salePrice * PCT_COSTS.marketing;
+  const realtorPerUnit     = salePrice * PCT_COSTS.realtorCommission;
+
+  // ── TOTALS ──
+  const totalCostPerUnit = subtotalPerUnit + contingencyPerUnit + projectMgmtPerUnit
+                         + marketingPerUnit + realtorPerUnit;
+  const totalCostProject = totalCostPerUnit * units;
+  const totalRevenue     = salePrice * units;
+  const netProfit        = totalRevenue - totalCostProject;
+  const margin           = totalRevenue > 0 ? netProfit / totalRevenue : 0;
+
+  // ── BUYER PITI ──
+  const piti         = pitiCalc(salePrice, mortgageRate, downPct, taxRate);
+  const incomeRequired = piti.total / 0.28 * 12;
+
+  // ── CARRY SAVINGS BANNER ──────────────────────────────────────────────────
+  const banner = el('carry-banner');
+  if (carrySavingsPerUnit > 0) {
+    banner.style.display = 'flex';
+    el('carry-savings-total').textContent   = fmt(carrySavingsPerUnit * units) + ' project';
+    el('carry-savings-per-unit').textContent = fmt(carrySavingsPerUnit) + ' per unit saved in carry';
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // ── KPIs ─────────────────────────────────────────────────────────────────
+  el('kpi-totalCost').textContent        = fmt(totalCostProject);
+  el('kpi-totalCostPerUnit').textContent = fmt(totalCostPerUnit) + ' / unit';
+  el('kpi-revenue').textContent          = fmt(totalRevenue);
+  el('kpi-revenuePerUnit').textContent   = fmt(salePrice) + ' / unit';
+  el('kpi-profit').textContent           = fmt(netProfit);
+  el('kpi-margin').textContent           = pct(margin) + ' margin';
+  el('kpi-piti').textContent             = fmt(pitiWithSS.total) + '/mo';
+  el('kpi-income-req').textContent       = fmt(pitiWithSS.total / 0.28 * 12) + ' req.';
+  el('kpi-profit-card').className        = 'kpi ' + (netProfit >= 0 ? 'green' : 'red');
+
+  // ── COST TABLE ────────────────────────────────────────────────────────────
+  // Rows: { label, perUnit, carry, deferKey, canToggle, cat, sub }
+  const rows = [
+    { cat: 'Land' },
+    { label:'Land (amortized)',            perUnit: landPerUnit,             carry: landCarry,     deferKey:'land',       canToggle:true  },
+    { sub: 'Land Subtotal',                perUnit: landPerUnit,             carry: landCarry },
+
+    { cat: 'Hard Costs — Construction' },
+    { label:'Vertical Construction',       perUnit: vertPerUnit,             carry: vertCarry,     deferKey:'vertical',   canToggle:false },
+    { label:'Horizontal Development',      perUnit: horizPerUnit,            carry: horizCarry,    deferKey:'horizontal', canToggle:false },
+    { sub: 'Construction Subtotal',        perUnit: vertPerUnit+horizPerUnit,carry: vertCarry+horizCarry },
+
+    { cat: 'Hard Costs — City Fees' },
+    { label:'Impact Fees',                 perUnit: impactFeePerUnit,        carry: impactCarry,   deferKey:'impactFees', canToggle:true  },
+    { label:'Building Permit + Hookup',    perUnit: BUILDING_PERMIT_PER_UNIT,carry: permitCarry,   deferKey:'permitFees', canToggle:true  },
+    { label:'Per-Lot City Fees',           perUnit: perUnitCityFees,         carry: cityFeesCarry, deferKey:'cityFees',   canToggle:false },
+    { sub: 'City Fees Subtotal',           perUnit: impactFeePerUnit+BUILDING_PERMIT_PER_UNIT+perUnitCityFees,
+                                           carry:   impactCarry+permitCarry+cityFeesCarry },
+
+    { cat: 'Soft Costs' },
+    { label:'Entitlement & Due Diligence', perUnit: fixedPerUnit,            carry: fixedCarry,    deferKey:'entitlement',canToggle:false },
+    { label:'Construction Carry (total)',  perUnit: totalCarryPerUnit,       carry: 0,             deferKey:null,         canToggle:false, isCarryLine:true },
+    { label:'Loan Origination (1%)',       perUnit: loanOrigPerUnit,         carry: 0,             deferKey:null,         canToggle:false },
+    { sub: 'Soft Cost Subtotal',           perUnit: softCostPerUnit,         carry: 0 },
+
+    { cat: 'Percentage-Based' },
+    { label:'Contingency (15%)',           perUnit: contingencyPerUnit,      carry: 0,  deferKey:null, canToggle:false },
+    { label:'Project Mgmt (4%)',           perUnit: projectMgmtPerUnit,      carry: 0,  deferKey:null, canToggle:false },
+    { label:'Marketing (3% of sale)',      perUnit: marketingPerUnit,        carry: 0,  deferKey:'marketing', canToggle:true },
+    { label:'Realtor Commission (3%)',     perUnit: realtorPerUnit,          carry: 0,  deferKey:'realtor',   canToggle:true },
+  ];
+
+  let html = '';
+  rows.forEach(r => {
+    if (r.cat) {
+      html += `<tr class="category"><td colspan="5">${r.cat}</td></tr>`;
+    } else if (r.sub) {
+      html += `<tr class="subtotal">
+        <td colspan="2">${r.sub}</td>
+        <td style="text-align:right">${fmt(r.perUnit)}</td>
+        <td style="text-align:right;color:${r.carry>0?'#b83232':'#8a8278'}">${r.carry>0?fmt(r.carry):'—'}</td>
+        <td style="text-align:right">${fmt(r.perUnit * units)}</td>
+      </tr>`;
+    } else if (r.isCarryLine) {
+      html += `<tr style="background:#fff8ee">
+        <td style="color:#b86b00;font-weight:600">${r.label}</td>
+        <td style="text-align:center"><span style="background:#fff8ee;color:#b86b00;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace">DERIVED</span></td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:700;color:#b86b00">${fmt(r.perUnit)}</td>
+        <td style="text-align:right;color:#8a8278">—</td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:500">${fmt(r.perUnit * units)}</td>
+      </tr>`;
+    } else {
+      const carryTd = r.carry > 0
+        ? `<span style="color:#b83232;font-family:'DM Mono',monospace;font-weight:500">${fmt(r.carry)}</span>`
+        : (r.deferKey && DEFER[r.deferKey] ? `<span style="color:#1a7a4a;font-size:11px">saved</span>` : `<span style="color:#8a8278">—</span>`);
+      html += `<tr>
+        <td>${r.label}</td>
+        <td style="text-align:center">${r.deferKey ? timingBadge(r.deferKey, r.canToggle) : ''}</td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:500">${fmt(r.perUnit)}</td>
+        <td style="text-align:right">${carryTd}</td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:500">${fmt(r.perUnit * units)}</td>
+      </tr>`;
+    }
+  });
+  html += `<tr class="total">
+    <td colspan="2">Total Cost per Unit · Total Project</td>
+    <td style="text-align:right">${fmt(totalCostPerUnit)}</td>
+    <td style="text-align:right;color:#7dd3a8;font-size:12px">${carrySavingsPerUnit>0?'−'+fmt(carrySavingsPerUnit)+' carry saved':''}</td>
+    <td style="text-align:right">${fmt(totalCostProject)}</td>
+  </tr>`;
+  el('cost-tbody').innerHTML = html;
+
+  // ── SILENT SECOND ─────────────────────────────────────────────────────────
+  const silentSecondAmt = parseFloat(el('silentSecond').value) || 75000;
+  const firstMortgage   = Math.max(0, salePrice - silentSecondAmt);
+
+  // PITI without silent second (full sale price)
+  const pitiNoSS   = pitiCalc(salePrice,    mortgageRate, downPct, taxRate);
+  // PITI with silent second (reduced first mortgage)
+  const pitiWithSS = pitiCalc(firstMortgage, mortgageRate, downPct, taxRate);
+  const pitiSavings = pitiNoSS.total - pitiWithSS.total;
+
+  // Silent second banner
+  el('ss-first-mortgage').textContent  = fmt(firstMortgage);
+  el('ss-monthly-savings').textContent = fmt(pitiSavings) + '/mo';
+  el('ss-income-req').textContent      = fmt(pitiWithSS.total / 0.28 * 12);
+
+  // ── PITI GRID ─────────────────────────────────────────────────────────────
+  const pitiScenarios = [
+    { label:'No Silent Second',        color:'#b83232', bg:'#fdf0f0', price: salePrice,       piti: pitiNoSS   },
+    { label:'With H4U Silent Second',  color:'#1a5fa8', bg:'#eef4fd', price: firstMortgage,   piti: pitiWithSS, badge: fmt(silentSecondAmt)+' subordinated' },
+    { label:'Break-Even Price',        color:'#b86b00', bg:'#fff8ee', price: totalCostPerUnit, piti: pitiCalc(totalCostPerUnit, mortgageRate, downPct, taxRate) },
+  ];
+  el('piti-grid').innerHTML = pitiScenarios.map(s => {
+    return `<div class="piti-card">
+      <div class="piti-head" style="background:${s.bg};color:${s.color}">${s.label}${s.badge?`<div style="font-size:10px;font-weight:600;opacity:0.8;margin-top:2px">${s.badge}</div>`:''}</div>
+      <div class="piti-total" style="color:${s.color}">${fmt(s.piti.total)}<span style="font-size:12px;font-weight:400;color:var(--muted)">/mo</span></div>
+      <div class="piti-rows">
+        ${[['First Mortgage',fmt(s.price)],['P&I',fmt(s.piti.pi)],['Taxes',fmt(s.piti.taxes)],['Insurance',fmt(s.piti.ins)],['PMI',fmt(s.piti.pmi)],['Income Req.',fmt(s.piti.total/0.28*12)]]
+          .map(([k,v])=>`<div class="piti-row"><span class="pk">${k}</span><span class="pv">${v}</span></div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── AFFORDABILITY ─────────────────────────────────────────────────────────
+  const incomes = [75000, 100000, 125000, 150000, 175000, 200000];
+  el('afford-tbody').innerHTML = incomes.map((inc,i) => {
+    const mx      = maxAffordable(inc, mortgageRate, downPct, taxRate);
+    const gapNoSS = salePrice - mx;
+    const gapSS   = firstMortgage - mx;
+    const mp      = pitiCalc(Math.min(mx, firstMortgage), mortgageRate, downPct, taxRate);
+
+    const noSSHtml = gapNoSS <= 0
+      ? `<span class="yes">✓ qualifies</span>`
+      : gapNoSS <= salePrice * 0.1
+        ? `<span class="close">${fmt(gapNoSS)} gap</span>`
+        : `<span class="gap">${fmt(gapNoSS)} gap</span>`;
+
+    const ssHtml = gapSS <= 0
+      ? `<span class="yes">✓ qualifies</span>`
+      : gapSS <= firstMortgage * 0.1
+        ? `<span class="close">${fmt(gapSS)} gap</span>`
+        : `<span class="gap">${fmt(gapSS)} gap</span>`;
+
+    return `<tr style="background:${i%2?'#faf8f5':''}">
+      <td>${fmt(inc)}</td>
+      <td>${fmt(mx)}</td>
+      <td>${noSSHtml}</td>
+      <td>${ssHtml}</td>
+      <td>${fmt(mp.total)}/mo</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+recalc();
+</script>
+</body>
+</html>
