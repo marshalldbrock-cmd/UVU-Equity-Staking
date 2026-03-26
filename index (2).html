@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halvorsen Ridge -- Development Pro Forma</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#f5f2ee; --surface:#fff; --surface2:#f0ece6; --border:#ddd8d0;
+  --ink:#1a1714; --ink2:#4a4540; --muted:#8a8278; --dim:#bbb4aa;
+  --green:#1a7a4a; --green-bg:#e8f5ee; --green-border:#b8ddc8;
+  --red:#b83232; --red-bg:#fdf0f0; --red-border:#f0c8c8;
+  --amber:#b86b00; --amber-bg:#fff8ee; --amber-border:#f0d8a8;
+  --blue:#1a5fa8; --blue-bg:#eef4fd; --blue-border:#b8d0f0;
+}
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink); font-size:14px; line-height:1.5; }
+header { background:var(--ink); color:#fff; padding:18px 28px; display:flex; align-items:baseline; justify-content:space-between; }
+.proj-name { font-size:20px; font-weight:700; letter-spacing:-0.5px; }
+.proj-sub { font-size:12px; color:#94908a; font-family:'DM Mono',monospace; margin-left:12px; }
+.save-status { font-size:11px; font-family:'DM Mono',monospace; color:#94908a; }
+.save-status.saving { color:#f59e0b; }
+.save-status.saved  { color:#34d399; }
+.save-status.error  { color:#ef4444; }
+.wrap { max-width:1200px; margin:0 auto; padding:24px; }
+.main-grid { display:grid; grid-template-columns:340px 1fr; gap:24px; align-items:start; }
+.tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:16px; }
+.tab-btn { padding:10px 18px; background:none; border:none; border-bottom:2px solid transparent; font-weight:600; font-size:13px; cursor:pointer; color:var(--muted); font-family:'DM Sans',sans-serif; }
+.tab-btn.active { color:var(--blue); border-bottom-color:var(--blue); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.panel { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+.panel-head { padding:12px 18px; border-bottom:1px solid var(--border); font-weight:700; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); background:var(--surface2); font-family:'DM Mono',monospace; display:flex; justify-content:space-between; align-items:center; }
+.panel-body { padding:18px; }
+.field { margin-bottom:12px; }
+.field label { display:block; font-size:12px; font-weight:600; color:var(--ink2); margin-bottom:4px; }
+.input-wrap { display:flex; align-items:center; border:1px solid var(--border); border-radius:7px; background:var(--bg); overflow:hidden; transition:border-color 0.15s; }
+.input-wrap:focus-within { border-color:var(--blue); }
+.affix { padding:0 9px; color:var(--muted); font-family:'DM Mono',monospace; font-size:13px; background:var(--surface2); border-right:1px solid var(--border); height:34px; display:flex; align-items:center; }
+.affix.right { border-right:none; border-left:1px solid var(--border); }
+input[type="number"], input[type="text"] { flex:1; border:none; background:transparent; padding:7px 9px; font-size:13px; font-family:'DM Mono',monospace; color:var(--ink); outline:none; width:100%; min-width:0; }
+.section-label { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--muted); font-family:'DM Mono',monospace; margin:18px 0 8px; padding-bottom:5px; border-bottom:1px solid var(--border); }
+.section-label:first-child { margin-top:0; }
+.slider-field { margin-bottom:14px; }
+.slider-label-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+.slider-label { font-size:12px; font-weight:600; color:var(--ink2); }
+.slider-val { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; color:var(--blue); }
+input[type="range"] { width:100%; accent-color:var(--blue); cursor:pointer; }
+.kpi-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
+.kpi { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+.kpi-label { font-size:11px; color:var(--muted); font-weight:600; letter-spacing:0.4px; margin-bottom:3px; }
+.kpi-val { font-size:20px; font-weight:700; font-family:'DM Mono',monospace; letter-spacing:-0.5px; }
+.kpi-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+.kpi.green { background:var(--green-bg); border-color:var(--green-border); }
+.kpi.green .kpi-val { color:var(--green); }
+.kpi.red { background:var(--red-bg); border-color:var(--red-border); }
+.kpi.red .kpi-val { color:var(--red); }
+.kpi.amber { background:var(--amber-bg); border-color:var(--amber-border); }
+.kpi.amber .kpi-val { color:var(--amber); }
+.kpi.blue { background:var(--blue-bg); border-color:var(--blue-border); }
+.kpi.blue .kpi-val { color:var(--blue); }
+.cost-table { width:100%; border-collapse:collapse; font-size:12px; }
+.cost-table th { padding:7px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.7px; text-transform:uppercase; color:var(--muted); background:var(--surface2); border-bottom:1px solid var(--border); }
+.cost-table th.r, .cost-table td.r { text-align:right; }
+.cost-table td { padding:6px 12px; border-bottom:1px solid #f0ece6; vertical-align:middle; }
+.cost-table tr.cat-row td { font-weight:700; color:var(--ink); background:var(--surface2); font-size:10px; letter-spacing:0.5px; text-transform:uppercase; padding:5px 12px; }
+.cost-table tr.sub-row td { font-weight:700; background:#f7f4f0; border-top:2px solid var(--border); color:var(--ink); }
+.cost-table tr.total-row td { font-weight:700; font-size:13px; background:var(--ink); color:#fff; border-bottom:none; }
+.cost-table tr.total-row td.r { color:#7dd3a8; font-size:15px; }
+.cost-input { width:110px; background:var(--bg); border:1px solid var(--border); color:var(--ink); font-family:'DM Mono',monospace; font-size:12px; font-weight:500; padding:3px 7px; border-radius:5px; text-align:right; outline:none; transition:border-color 0.15s; }
+.cost-input:focus { border-color:var(--blue); background:#fff; }
+.cost-input.saving { border-color:var(--amber); }
+.cost-input.saved  { border-color:var(--green); }
+.timing-btn { padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; font-family:'DM Mono',monospace; cursor:pointer; border:1px solid; white-space:nowrap; }
+.timing-btn.closing { background:var(--green-bg); color:var(--green); border-color:var(--green-border); }
+.timing-btn.upfront { background:var(--red-bg); color:var(--red); border-color:var(--red-border); }
+.timing-btn.fixed   { background:var(--surface2); color:var(--muted); border-color:var(--border); cursor:default; font-weight:600; }
+.banner { border-radius:10px; padding:12px 18px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+.banner.green { background:var(--green-bg); border:1px solid var(--green-border); }
+.banner.blue  { background:var(--blue-bg);  border:1px solid var(--blue-border); }
+.banner-title { font-weight:700; font-size:13px; }
+.banner-sub { font-size:11px; margin-top:2px; }
+.banner.green .banner-title,.banner.green .banner-num-val { color:var(--green); }
+.banner.green .banner-sub,.banner.green .banner-num-label { color:#4a8a6a; }
+.banner.blue .banner-title,.banner.blue .banner-num-val { color:var(--blue); }
+.banner.blue .banner-sub,.banner.blue .banner-num-label { color:#4a6a8a; }
+.banner-nums { display:flex; gap:20px; flex-wrap:wrap; }
+.banner-num-label { font-size:10px; margin-bottom:2px; }
+.banner-num-val { font-family:'DM Mono',monospace; font-weight:700; font-size:17px; }
+.piti-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.piti-card { border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.piti-head { padding:10px 14px; font-weight:700; font-size:12px; }
+.piti-total { font-size:19px; font-weight:700; font-family:'DM Mono',monospace; padding:0 14px 10px; }
+.piti-rows { border-top:1px solid var(--border); }
+.piti-row { display:flex; justify-content:space-between; padding:5px 14px; border-bottom:1px solid #f5f2ee; font-size:11px; }
+.piti-row .pk { color:var(--muted); }
+.piti-row .pv { font-family:'DM Mono',monospace; font-weight:500; }
+.afford-table { width:100%; border-collapse:collapse; font-size:12px; }
+.afford-table th { padding:7px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.7px; text-transform:uppercase; color:var(--muted); background:var(--surface2); border-bottom:1px solid var(--border); }
+.afford-table td { padding:8px 12px; border-bottom:1px solid #f0ece6; font-family:'DM Mono',monospace; font-size:12px; }
+.yes { color:var(--green); font-weight:700; }
+.gap { color:var(--red); font-weight:700; }
+.close { color:var(--amber); font-weight:700; }
+.loading-overlay { position:fixed; inset:0; background:rgba(245,242,238,0.9); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:100; gap:12px; }
+.loading-spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin 0.7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { font-family:'DM Mono',monospace; font-size:13px; color:var(--muted); }
+.type-tag { font-size:9px; color:var(--muted); font-family:'DM Mono',monospace; display:block; margin-top:1px; }
+@media(max-width:900px){.main-grid{grid-template-columns:1fr;}.kpi-strip{grid-template-columns:repeat(2,1fr);}.piti-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading cost data from Supabase...</div>
+</div>
+
+<header>
+  <div style="display:flex;align-items:baseline;gap:12px">
+    <span class="proj-name">Halvorsen Ridge</span>
+    <span class="proj-sub">Spanish Fork, UT &middot; Development Pro Forma</span>
+  </div>
+  <div class="save-status" id="save-status">connecting...</div>
+</header>
+
+<div class="wrap">
+  <div class="main-grid">
+
+    <!-- LEFT: ASSUMPTIONS -->
+    <div>
+      <div class="panel">
+        <div class="panel-head">Project Assumptions</div>
+        <div class="panel-body">
+
+          <div class="section-label">Scale</div>
+          <div class="field">
+            <label>Total Units</label>
+            <div class="input-wrap"><input type="number" id="units" value="104" min="1" oninput="recalc()"></div>
+          </div>
+          <div class="slider-field">
+            <div class="slider-label-row">
+              <span class="slider-label">Units (drag)</span>
+              <span class="slider-val" id="unitsSliderVal">104</span>
+            </div>
+            <input type="range" id="unitsSlider" min="50" max="300" value="104"
+              oninput="el('units').value=this.value;el('unitsSliderVal').textContent=this.value;recalc()">
+          </div>
+
+          <div class="section-label">Sale Price</div>
+          <div class="field">
+            <label>Sale Price per Unit</label>
+            <div class="input-wrap"><span class="affix">$</span><input type="number" id="salePrice" value="420000" oninput="recalc()"></div>
+          </div>
+
+          <div class="section-label">H4U Silent Second</div>
+          <div class="slider-field">
+            <div class="slider-label-row">
+              <span class="slider-label">Silent Second Amount</span>
+              <span class="slider-val" id="ssVal">$75,000</span>
+            </div>
+            <input type="range" id="silentSecond" min="75000" max="100000" step="1000" value="75000"
+              oninput="el('ssVal').textContent='$'+(+this.value).toLocaleString();recalc()">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:3px">
+              <span>$75,000</span><span>$100,000</span>
+            </div>
+          </div>
+          <div style="background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:6px;padding:8px 12px;font-size:11px;color:var(--blue);margin-bottom:4px">
+            H4U funded &middot; 0% interest &middot; due on sale or refi &middot; subordinated
+          </div>
+
+          <div class="section-label">Construction Financing</div>
+          <div class="field">
+            <label>Construction Loan Rate</label>
+            <div class="input-wrap"><input type="number" id="constRate" value="8.5" step="0.25" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+          <div class="field">
+            <label>Construction Period (months)</label>
+            <div class="input-wrap"><input type="number" id="constMonths" value="18" oninput="recalc()"></div>
+          </div>
+          <div class="field">
+            <label>LTV (loan-to-cost)</label>
+            <div class="input-wrap"><input type="number" id="ltv" value="65" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+
+          <div class="section-label">Buyer Mortgage</div>
+          <div class="field">
+            <label>Mortgage Rate</label>
+            <div class="input-wrap"><input type="number" id="mortgageRate" value="6.75" step="0.125" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+          <div class="field">
+            <label>Down Payment</label>
+            <div class="input-wrap"><input type="number" id="downPct" value="5" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+          <div class="field">
+            <label>Property Tax Rate</label>
+            <div class="input-wrap"><input type="number" id="taxRate" value="0.65" step="0.05" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+
+          <div class="section-label">Percentage-Based Costs</div>
+          <div class="field">
+            <label>Contingency</label>
+            <div class="input-wrap"><input type="number" id="pctContingency" value="15" step="1" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+          <div class="field">
+            <label>Project Management</label>
+            <div class="input-wrap"><input type="number" id="pctMgmt" value="4" step="0.5" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+          <div class="field">
+            <label>Marketing (% of sale)</label>
+            <div class="input-wrap"><input type="number" id="pctMarketing" value="3" step="0.5" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+          <div class="field">
+            <label>Realtor Commission (% of sale)</label>
+            <div class="input-wrap"><input type="number" id="pctRealtor" value="3" step="0.5" oninput="recalc()"><span class="affix right">%</span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: OUTPUTS -->
+    <div>
+      <div class="kpi-strip">
+        <div class="kpi blue">
+          <div class="kpi-label">Total Project Cost</div>
+          <div class="kpi-val" id="kpi-cost">--</div>
+          <div class="kpi-sub" id="kpi-cost-unit">per unit</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-label">Total Revenue</div>
+          <div class="kpi-val" id="kpi-rev">--</div>
+          <div class="kpi-sub" id="kpi-rev-unit">per unit</div>
+        </div>
+        <div class="kpi" id="kpi-profit-card">
+          <div class="kpi-label">Net Profit / Loss</div>
+          <div class="kpi-val" id="kpi-profit">--</div>
+          <div class="kpi-sub" id="kpi-margin">margin</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">PITI w/ Silent Second</div>
+          <div class="kpi-val" id="kpi-piti">--</div>
+          <div class="kpi-sub" id="kpi-income">income req.</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('costs')">Cost Stack</button>
+        <button class="tab-btn" onclick="switchTab('piti')">Buyer Analysis</button>
+        <button class="tab-btn" onclick="switchTab('afford')">Affordability</button>
+      </div>
+
+      <!-- COST STACK -->
+      <div id="tab-costs" class="tab-panel active">
+        <div class="banner green" id="carry-banner" style="display:none">
+          <div>
+            <div class="banner-title">Deferral Carry Savings</div>
+            <div class="banner-sub">Cost eliminated by pushing fees to closing</div>
+          </div>
+          <div class="banner-nums">
+            <div><div class="banner-num-label">Project Total</div><div class="banner-num-val" id="carry-project">--</div></div>
+            <div><div class="banner-num-label">Per Unit</div><div class="banner-num-val" id="carry-unit">--</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <span>Cost Stack &middot; All Line Items Editable</span>
+            <span style="font-size:10px;font-weight:400;color:var(--muted)">Click timing badges to toggle deferral</span>
+          </div>
+          <table class="cost-table">
+            <thead>
+              <tr>
+                <th>Line Item</th>
+                <th style="text-align:center">Timing</th>
+                <th class="r">Amount</th>
+                <th class="r">Carry Cost</th>
+                <th class="r">Project Total</th>
+              </tr>
+            </thead>
+            <tbody id="cost-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BUYER ANALYSIS -->
+      <div id="tab-piti" class="tab-panel">
+        <div class="banner blue">
+          <div>
+            <div class="banner-title">H4U Silent Second Impact</div>
+            <div class="banner-sub">0% &middot; subordinated &middot; due on sale or refi</div>
+          </div>
+          <div class="banner-nums">
+            <div><div class="banner-num-label">First Mortgage</div><div class="banner-num-val" id="ss-mortgage">--</div></div>
+            <div><div class="banner-num-label">Monthly Savings</div><div class="banner-num-val" id="ss-savings">--</div></div>
+            <div><div class="banner-num-label">Income Required</div><div class="banner-num-val" id="ss-income">--</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">Monthly Payment Comparison</div>
+          <div class="panel-body"><div class="piti-grid" id="piti-grid"></div></div>
+        </div>
+      </div>
+
+      <!-- AFFORDABILITY -->
+      <div id="tab-afford" class="tab-panel">
+        <div class="panel">
+          <div class="panel-head">Affordability by Household Income &middot; 28% DTI</div>
+          <table class="afford-table">
+            <thead>
+              <tr>
+                <th>Household Income</th>
+                <th>Max Affordable</th>
+                <th>No Silent Second</th>
+                <th>With Silent Second</th>
+                <th>PITI (w/ SS)</th>
+              </tr>
+            </thead>
+            <tbody id="afford-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://vgdfgjupcivyfxljgxqg.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZnZGZnanVwY2l2eWZ4bGpneHFnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0OTY3OTEsImV4cCI6MjA5MDA3Mjc5MX0.BdsaCBNyo7Mf7WZPPiI-f9jidlkslAQOubWSh-BuCio';
+
+const el  = id => document.getElementById(id);
+const val = id => parseFloat(el(id).value) || 0;
+const fmt = n  => '$' + Math.round(n).toLocaleString();
+const pct = n  => (n*100).toFixed(1)+'%';
+
+// All cost line items
+// type: 'project' = enter total project cost (divided by units in calc)
+//       'unit'    = enter per-unit cost (used directly)
+const COST_LINES = [
+  { id:'land',               label:'Land (total project)',            cat:'Land',                    type:'project', default:5000000, defer:true  },
+  { id:'horizontal',         label:'Horizontal Development',          cat:'Horizontal Construction', type:'unit',    default:28000,   defer:false },
+  { id:'vertical',           label:'Vertical Construction',           cat:'Vertical Construction',   type:'unit',    default:185000,  defer:false },
+  { id:'fee_power',          label:'Power & Light',                   cat:'Impact Fees',             type:'unit',    default:2136.90, defer:true  },
+  { id:'fee_storm',          label:'Storm Water',                     cat:'Impact Fees',             type:'unit',    default:1253.21, defer:true  },
+  { id:'fee_water',          label:'Drinking Water',                  cat:'Impact Fees',             type:'unit',    default:2260.50, defer:true  },
+  { id:'fee_irrigation',     label:'Pressurized Irrigation',          cat:'Impact Fees',             type:'unit',    default:1588.06, defer:true  },
+  { id:'fee_wastewater',     label:'Wastewater',                      cat:'Impact Fees',             type:'unit',    default:5763.51, defer:true  },
+  { id:'fee_safety',         label:'Public Safety',                   cat:'Impact Fees',             type:'unit',    default:1106.29, defer:true  },
+  { id:'fee_transportation', label:'Transportation',                  cat:'Impact Fees',             type:'unit',    default:1992.92, defer:true  },
+  { id:'fee_parks',          label:'Parks, Trails & Recreation',      cat:'Impact Fees',             type:'unit',    default:4896.00, defer:true  },
+  { id:'permit_building',    label:'Building Permit & Hookup',        cat:'Permit Fees',             type:'unit',    default:5836.77, defer:false },
+  { id:'permit_finalplat',   label:'Final Plat Review (per lot)',     cat:'Permit Fees',             type:'unit',    default:122,     defer:false },
+  { id:'permit_subdivision', label:'Minor Subdivision (per lot)',     cat:'Permit Fees',             type:'unit',    default:600,     defer:false },
+  { id:'permit_prelim',      label:'Preliminary Plat (per lot)',      cat:'Permit Fees',             type:'unit',    default:71,      defer:false },
+  { id:'permit_deposit',     label:'Construction Deposit (per unit)', cat:'Permit Fees',             type:'unit',    default:1500,    defer:false },
+  { id:'dd_alta',            label:'ALTA/NSPS Land Title Survey',     cat:'Due Diligence',           type:'project', default:5000,    defer:false },
+  { id:'dd_market',          label:'Market Study / Absorption',       cat:'Due Diligence',           type:'project', default:5000,    defer:false },
+  { id:'dd_topo',            label:'Topographic Survey',              cat:'Due Diligence',           type:'project', default:2000,    defer:false },
+  { id:'dd_boundary',        label:'Boundary Staking',                cat:'Due Diligence',           type:'project', default:800,     defer:false },
+  { id:'dd_phase1',          label:'Phase I ESA',                     cat:'Due Diligence',           type:'project', default:2500,    defer:false },
+  { id:'dd_phase2',          label:'Phase II ESA',                    cat:'Due Diligence',           type:'project', default:7500,    defer:false },
+  { id:'dd_wetland',         label:'Wetland Delineation',             cat:'Due Diligence',           type:'project', default:1500,    defer:false },
+  { id:'dd_stream',          label:'Stream / OHWM Determination',     cat:'Due Diligence',           type:'project', default:2500,    defer:false },
+  { id:'dd_flood',           label:'Floodplain Study / CLOMR',        cat:'Due Diligence',           type:'project', default:5000,    defer:false },
+  { id:'dd_geotech',         label:'Geotechnical Soil Study',         cat:'Due Diligence',           type:'project', default:2500,    defer:false },
+  { id:'dd_geotech2',        label:'Geotech Infiltration Testing',    cat:'Due Diligence',           type:'project', default:1500,    defer:false },
+  { id:'dd_cutfill',         label:'Cut & Fill Analysis',             cat:'Due Diligence',           type:'project', default:2000,    defer:false },
+  { id:'dd_traffic',         label:'Traffic Impact Study',            cat:'Due Diligence',           type:'project', default:8000,    defer:false },
+  { id:'dd_surveyA',         label:'Surveyor Table A Items',          cat:'Due Diligence',           type:'project', default:500,     defer:false },
+  { id:'ent_annexation',     label:'Annexation Petition',             cat:'Entitlement',             type:'project', default:1440,    defer:false },
+  { id:'ent_zone',           label:'Zone Change',                     cat:'Entitlement',             type:'project', default:420,     defer:false },
+  { id:'ent_prelim_plat',    label:'Preliminary Plat Review',         cat:'Entitlement',             type:'project', default:2780,    defer:false },
+  { id:'ent_final_plat',     label:'Final Plat Review (per plat)',    cat:'Entitlement',             type:'project', default:2415,    defer:false },
+  { id:'ent_general_plan',   label:'General Plan',                    cat:'Entitlement',             type:'project', default:420,     defer:false },
+  { id:'ent_minor_plat',     label:'Minor Plat Amendment',            cat:'Entitlement',             type:'project', default:600,     defer:false },
+  { id:'ent_siteplan',       label:'Site Plan Review',                cat:'Entitlement',             type:'project', default:3625,    defer:false },
+  { id:'ent_cup',            label:'Conditional Use Permit',          cat:'Entitlement',             type:'project', default:420,     defer:false },
+  { id:'ent_appeals',        label:'Appeals Authority',               cat:'Entitlement',             type:'project', default:420,     defer:false },
+  { id:'ent_zone_verify',    label:'Zone Verification',               cat:'Entitlement',             type:'project', default:50,      defer:false },
+  { id:'ent_hydrant',        label:'Hydrant Flow Test',               cat:'Entitlement',             type:'project', default:400,     defer:false },
+  { id:'ent_feasibility',    label:'Feasibility Consultant',          cat:'Entitlement',             type:'project', default:3000,    defer:false },
+  { id:'ent_printing',       label:'Document Printing & Mailing',     cat:'Entitlement',             type:'project', default:250,     defer:false },
+  { id:'ent_rezone',         label:'Rezone Narrative Package',        cat:'Entitlement',             type:'project', default:3000,    defer:false },
+  { id:'ent_neighbor',       label:'Neighborhood Meeting',            cat:'Entitlement',             type:'project', default:1050,    defer:false },
+  { id:'ent_attorney',       label:'Attorney -- Public Hearings',     cat:'Entitlement',             type:'project', default:4000,    defer:false },
+  { id:'ent_da',             label:'Development Agreement Review',    cat:'Entitlement',             type:'project', default:2000,    defer:false },
+  { id:'ent_attorney2',      label:'City Attorney Extra Hours',       cat:'Entitlement',             type:'project', default:1000,    defer:false },
+  { id:'ent_civil',          label:'Civil Engineer Base Contract',    cat:'Entitlement',             type:'project', default:17500,   defer:false },
+  { id:'ent_earnest',        label:'Earnest Money',                   cat:'Entitlement',             type:'project', default:50000,   defer:false },
+  { id:'soft_materials',     label:'Materials Testing',               cat:'Construction Soft Costs', type:'project', default:5000,    defer:false },
+  { id:'soft_underwriting',  label:'Loan Underwriting / Bank Legal',  cat:'Construction Soft Costs', type:'project', default:5000,    defer:false },
+  { id:'soft_appraisal',     label:'Appraisal Fee',                   cat:'Construction Soft Costs', type:'project', default:3000,    defer:false },
+  { id:'soft_insurance',     label:'General Liability Insurance',     cat:'Construction Soft Costs', type:'project', default:2000,    defer:false },
+  { id:'soft_accounting',    label:'Accounting / Bookkeeping',        cat:'Construction Soft Costs', type:'project', default:2500,    defer:false },
+  { id:'soft_hoa',           label:'HOA Setup Legal',                 cat:'Construction Soft Costs', type:'project', default:6500,    defer:false },
+  { id:'soft_taxes',         label:'Property Taxes (construction)',   cat:'Construction Soft Costs', type:'project', default:3800,    defer:false },
+  { id:'soft_security',      label:'Site Security & Fencing',         cat:'Construction Soft Costs', type:'project', default:8600,    defer:false },
+];
+
+// Cost values (loaded from Supabase, fallback to defaults)
+const costs = {};
+COST_LINES.forEach(l => { costs[l.id] = l.default; });
+
+// Deferral state
+const DEFER = {};
+COST_LINES.forEach(l => { if (l.defer !== null) DEFER[l.id] = l.defer; });
+function toggleDefer(id) { DEFER[id] = !DEFER[id]; recalc(); }
+
+// Supabase
+const SB_HEADERS = { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Authorization':'Bearer '+SUPABASE_KEY };
+async function sbLoad() {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/project_costs?select=id,amount`, { headers:SB_HEADERS });
+  if (!r.ok) throw new Error('load failed');
+  return r.json();
+}
+async function sbSave(id, amount, label, category) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/project_costs`, {
+    method:'POST',
+    headers:{ ...SB_HEADERS, 'Prefer':'resolution=merge-duplicates' },
+    body:JSON.stringify({ id, label, category, amount, updated_at:new Date().toISOString() })
+  });
+  if (!r.ok) throw new Error('save failed');
+}
+
+function setSaveStatus(cls, msg) {
+  const e = el('save-status');
+  e.className = 'save-status '+(cls||'');
+  e.textContent = msg;
+}
+
+let saveTimers = {};
+function onCostChange(id, inputEl) {
+  const amount = parseFloat(inputEl.value) || 0;
+  costs[id] = amount;
+  inputEl.className = 'cost-input saving';
+  setSaveStatus('saving', 'saving...');
+  clearTimeout(saveTimers[id]);
+  const line = COST_LINES.find(l => l.id === id);
+  saveTimers[id] = setTimeout(async () => {
+    try {
+      await sbSave(id, amount, line.label, line.cat);
+      inputEl.className = 'cost-input saved';
+      setSaveStatus('saved', 'saved');
+      setTimeout(() => { inputEl.className='cost-input'; setSaveStatus('','connected'); }, 2000);
+    } catch(e) {
+      inputEl.className = 'cost-input';
+      setSaveStatus('error', 'save failed -- check connection');
+    }
+  }, 700);
+  recalc();
+}
+
+function switchTab(name) {
+  ['costs','piti','afford'].forEach(t => {
+    el('tab-'+t).classList.toggle('active', t===name);
+  });
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['costs','piti','afford'][i]===name);
+  });
+}
+
+function pitiCalc(price, rate, dp, tax) {
+  const loan = price*(1-dp/100);
+  const mr   = rate/100/12;
+  const n    = 360;
+  const pi   = mr===0?loan/n:loan*(mr*Math.pow(1+mr,n))/(Math.pow(1+mr,n)-1);
+  const taxes = price*(tax/100)/12;
+  const ins   = price*0.005/12;
+  const pmi   = dp<20?loan*0.0085/12:0;
+  return { pi, taxes, ins, pmi, total:pi+taxes+ins+pmi, loan };
+}
+
+function maxAffordable(income, rate, dp, tax) {
+  const mb = income*0.28/12;
+  const r  = rate/100/12;
+  const n  = 360;
+  const piC = r===0?1/n:r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  const taxC = (tax/100)/12;
+  const insC = 0.005/12;
+  const pmiC = dp<20?0.0085*(1-dp/100)/12:0;
+  return mb/(piC*(1-dp/100)+taxC+insC+pmiC*(1-dp/100));
+}
+
+function recalc() {
+  const units       = Math.max(1, val('units'));
+  const salePrice   = val('salePrice');
+  const constRate   = val('constRate');
+  const constMonths = val('constMonths');
+  const ltv         = val('ltv');
+  const mortRate    = val('mortgageRate');
+  const downPct     = val('downPct');
+  const taxRate     = val('taxRate');
+  const pctCont     = val('pctContingency');
+  const pctMgmt     = val('pctMgmt');
+  const pctMkt      = val('pctMarketing');
+  const pctRealtor  = val('pctRealtor');
+  const ssAmt       = parseFloat(el('silentSecond').value)||75000;
+
+  el('unitsSlider').value = units;
+  el('unitsSliderVal').textContent = units;
+
+  const cpd = (ltv/100)*(constRate/100)*(constMonths/12); // carry per dollar
+
+  // Build per-unit amounts and carry per category
+  const catMap = {};
+  const catOrder = [];
+  let totalHard = 0, totalCarry = 0, allUpfrontCarry = 0;
+
+  COST_LINES.forEach(line => {
+    if (!catMap[line.cat]) { catMap[line.cat] = []; catOrder.push(line.cat); }
+    const raw     = costs[line.id] || 0;
+    const perUnit = line.type === 'project' ? raw / units : raw;
+    const deferred = DEFER[line.id] === true;
+    const canToggle = line.defer !== null;
+    const carry    = (!deferred && canToggle) ? perUnit * cpd : 0;
+    totalHard     += perUnit;
+    totalCarry    += carry;
+    if (canToggle) allUpfrontCarry += perUnit * cpd;
+    catMap[line.cat].push({ ...line, perUnit, carry, deferred, canToggle });
+  });
+
+  const carrySavings = allUpfrontCarry - totalCarry;
+  const loanOrig     = (totalHard * units * ltv/100) / units * 0.01;
+  const subtotal     = totalHard + totalCarry + loanOrig;
+  const contAmt      = subtotal * pctCont/100;
+  const mgmtAmt      = subtotal * pctMgmt/100;
+  const mktAmt       = salePrice * pctMkt/100;
+  const realtorAmt   = salePrice * pctRealtor/100;
+  const totalCostPU  = subtotal + contAmt + mgmtAmt + mktAmt + realtorAmt;
+  const totalCostProj= totalCostPU * units;
+  const totalRev     = salePrice * units;
+  const profit       = totalRev - totalCostProj;
+  const margin       = totalRev > 0 ? profit/totalRev : 0;
+
+  const firstMort    = Math.max(0, salePrice - ssAmt);
+  const pitiNoSS     = pitiCalc(salePrice,  mortRate, downPct, taxRate);
+  const pitiSS       = pitiCalc(firstMort,  mortRate, downPct, taxRate);
+  const pitiSavings  = pitiNoSS.total - pitiSS.total;
+
+  // KPIs
+  el('kpi-cost').textContent      = fmt(totalCostProj);
+  el('kpi-cost-unit').textContent = fmt(totalCostPU)+'/unit';
+  el('kpi-rev').textContent       = fmt(totalRev);
+  el('kpi-rev-unit').textContent  = fmt(salePrice)+'/unit';
+  el('kpi-profit').textContent    = fmt(profit);
+  el('kpi-margin').textContent    = pct(margin)+' margin';
+  el('kpi-piti').textContent      = fmt(pitiSS.total)+'/mo';
+  el('kpi-income').textContent    = fmt(pitiSS.total/0.28*12)+' req.';
+  el('kpi-profit-card').className = 'kpi '+(profit>=0?'green':'red');
+
+  // Carry banner
+  const banner = el('carry-banner');
+  if (carrySavings > 1) {
+    banner.style.display = 'flex';
+    el('carry-project').textContent = fmt(carrySavings*units);
+    el('carry-unit').textContent    = fmt(carrySavings);
+  } else { banner.style.display = 'none'; }
+
+  // Cost table
+  let html = '';
+  catOrder.forEach(cat => {
+    html += `<tr class="cat-row"><td colspan="5">${cat}</td></tr>`;
+    let catTot = 0, catCarry = 0;
+    catMap[cat].forEach(r => {
+      catTot   += r.perUnit;
+      catCarry += r.carry;
+      const timingHtml = r.canToggle
+        ? `<button class="timing-btn ${r.deferred?'closing':'upfront'}" onclick="toggleDefer('${r.id}')">${r.deferred?'AT CLOSING':'UPFRONT'}</button>`
+        : `<span class="timing-btn fixed">${r.type==='project'?'PROJ TOTAL':'PER UNIT'}</span>`;
+      const carryHtml = r.carry>0
+        ? `<span style="color:var(--red);font-family:'DM Mono',monospace">${fmt(r.carry)}</span>`
+        : r.deferred&&r.canToggle
+          ? `<span style="color:var(--green);font-size:10px">saved</span>`
+          : `<span style="color:var(--dim)">--</span>`;
+      const typeTag = `<span class="type-tag">${r.type==='project'?'project total':'per unit'}</span>`;
+      html += `<tr>
+        <td>${r.label}${typeTag}</td>
+        <td style="text-align:center">${timingHtml}</td>
+        <td class="r"><input class="cost-input" type="number" value="${Math.round(costs[r.id]||0)}" oninput="onCostChange('${r.id}',this)"></td>
+        <td class="r">${carryHtml}</td>
+        <td class="r" style="font-family:'DM Mono',monospace">${fmt(r.perUnit*units)}</td>
+      </tr>`;
+    });
+    html += `<tr class="sub-row">
+      <td colspan="2">${cat} Subtotal</td>
+      <td class="r">${fmt(catTot)}/unit</td>
+      <td class="r" style="color:${catCarry>0?'var(--red)':'var(--dim)'}">${catCarry>0?fmt(catCarry):'--'}</td>
+      <td class="r">${fmt(catTot*units)}</td>
+    </tr>`;
+  });
+
+  // Derived rows
+  html += `<tr class="cat-row"><td colspan="5">Derived Costs (calculated, not editable)</td></tr>`;
+  [
+    ['Construction Carry (total)', totalCarry, totalCarry*units, 'DERIVED'],
+    ['Loan Origination (1%)',       loanOrig,   loanOrig*units,  'DERIVED'],
+    [`Contingency (${pctCont}%)`,   contAmt,    contAmt*units,   'DERIVED'],
+    [`Project Mgmt (${pctMgmt}%)`,  mgmtAmt,    mgmtAmt*units,   'DERIVED'],
+    [`Marketing (${pctMkt}% of sale)`, mktAmt,  mktAmt*units,    'AT CLOSING'],
+    [`Realtor (${pctRealtor}% of sale)`, realtorAmt, realtorAmt*units, 'AT CLOSING'],
+  ].forEach(([label, pu, proj, badge]) => {
+    const isClosing = badge==='AT CLOSING';
+    html += `<tr>
+      <td>${label}</td>
+      <td style="text-align:center"><span class="timing-btn ${isClosing?'closing':'fixed'}">${badge}</span></td>
+      <td class="r" style="color:var(--amber);font-family:'DM Mono',monospace;font-weight:700">${fmt(pu)}</td>
+      <td class="r"><span style="color:var(--dim)">--</span></td>
+      <td class="r" style="font-family:'DM Mono',monospace">${fmt(proj)}</td>
+    </tr>`;
+  });
+
+  html += `<tr class="total-row">
+    <td colspan="2">TOTAL COST PER UNIT &nbsp;&middot;&nbsp; PROJECT TOTAL</td>
+    <td class="r">${fmt(totalCostPU)}</td>
+    <td class="r" style="color:#aaa;font-size:10px">${carrySavings>1?'-'+fmt(carrySavings)+' saved':''}</td>
+    <td class="r">${fmt(totalCostProj)}</td>
+  </tr>`;
+  el('cost-tbody').innerHTML = html;
+
+  // PITI
+  el('ss-mortgage').textContent = fmt(firstMort);
+  el('ss-savings').textContent  = fmt(pitiSavings)+'/mo';
+  el('ss-income').textContent   = fmt(pitiSS.total/0.28*12);
+
+  el('piti-grid').innerHTML = [
+    { label:'No Silent Second',        color:'#b83232', bg:'#fdf0f0', price:salePrice,     p:pitiNoSS },
+    { label:'w/ H4U Silent Second',    color:'#1a5fa8', bg:'#eef4fd', price:firstMort,     p:pitiSS, note:fmt(ssAmt)+' subordinated' },
+    { label:'Break-Even Price',        color:'#b86b00', bg:'#fff8ee', price:totalCostPU,   p:pitiCalc(totalCostPU,mortRate,downPct,taxRate) },
+  ].map(s=>`<div class="piti-card">
+    <div class="piti-head" style="background:${s.bg};color:${s.color}">${s.label}${s.note?`<div style="font-size:10px;opacity:0.7;margin-top:1px">${s.note}</div>`:''}</div>
+    <div class="piti-total" style="color:${s.color}">${fmt(s.p.total)}<span style="font-size:11px;font-weight:400;color:var(--muted)">/mo</span></div>
+    <div class="piti-rows">${[['First Mortgage',fmt(s.price)],['P&I',fmt(s.p.pi)],['Taxes',fmt(s.p.taxes)],['Insurance',fmt(s.p.ins)],['PMI',fmt(s.p.pmi)],['Income Req.',fmt(s.p.total/0.28*12)]]
+      .map(([k,v])=>`<div class="piti-row"><span class="pk">${k}</span><span class="pv">${v}</span></div>`).join('')}</div>
+  </div>`).join('');
+
+  // Affordability
+  el('afford-tbody').innerHTML = [75000,100000,125000,150000,175000,200000].map((inc,i)=>{
+    const mx  = maxAffordable(inc,mortRate,downPct,taxRate);
+    const g1  = salePrice-mx;
+    const g2  = firstMort-mx;
+    const mp  = pitiCalc(Math.min(mx,firstMort),mortRate,downPct,taxRate);
+    const s1  = g1<=0?`<span class="yes">&#10003; qualifies</span>`:g1<=salePrice*0.1?`<span class="close">${fmt(g1)} gap</span>`:`<span class="gap">${fmt(g1)} gap</span>`;
+    const s2  = g2<=0?`<span class="yes">&#10003; qualifies</span>`:g2<=firstMort*0.1?`<span class="close">${fmt(g2)} gap</span>`:`<span class="gap">${fmt(g2)} gap</span>`;
+    return `<tr style="background:${i%2?'#faf8f5':''}">
+      <td>${fmt(inc)}</td><td>${fmt(mx)}</td><td>${s1}</td><td>${s2}</td><td>${fmt(mp.total)}/mo</td>
+    </tr>`;
+  }).join('');
+}
+
+// Init: load from Supabase then render
+(async()=>{
+  try {
+    const rows = await sbLoad();
+    rows.forEach(r => { if(costs.hasOwnProperty(r.id)) costs[r.id]=parseFloat(r.amount)||0; });
+    setSaveStatus('saved','loaded from Supabase');
+    setTimeout(()=>setSaveStatus('','connected'),2500);
+  } catch(e) {
+    setSaveStatus('error','offline -- using defaults');
+  }
+  el('loading').style.display='none';
+  recalc();
+})();
+</script>
+</body>
+</html>
