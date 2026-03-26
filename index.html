@@ -88,16 +88,21 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
 .kpi.blue .kpi-val{color:var(--blue);}
 
 /* LEVER CARDS */
-.lever-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:10px;}
-.lever-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
-.lever-left .lever-name{font-weight:700;font-size:14px;color:var(--ink);}
-.lever-left .lever-desc{font-size:12px;color:var(--muted);margin-top:2px;}
-.lever-right{text-align:right;min-width:110px;}
-.lever-savings{font-family:'DM Mono',monospace;font-weight:700;font-size:18px;color:var(--green);}
-.lever-max{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
+.lever-card{background:var(--surface);border-radius:14px;margin-bottom:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:box-shadow 0.2s;}
+.lever-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.10);}
+.lever-header{display:flex;align-items:stretch;gap:0;}
+.lever-num{display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;font-family:'DM Mono',monospace;color:#fff;min-width:60px;flex-shrink:0;}
+.lever-meta{flex:1;padding:14px 18px 10px;}
+.lever-name{font-weight:800;font-size:15px;color:var(--ink);letter-spacing:-0.3px;}
+.lever-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.lever-pb{display:inline-block;border-radius:4px;font-size:10px;font-weight:700;padding:2px 7px;font-family:'DM Mono',monospace;margin-top:6px;}
+.lever-savings-block{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;padding:14px 20px;min-width:130px;flex-shrink:0;}
+.lever-savings{font-family:'DM Mono',monospace;font-weight:800;font-size:20px;letter-spacing:-0.5px;}
+.lever-max{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
+.lever-body{padding:10px 18px 14px 78px;}
 .lever-controls{display:flex;align-items:center;gap:12px;}
-.lever-pct{background:var(--surface2);color:var(--green);font-weight:700;font-size:13px;padding:3px 10px;border-radius:6px;min-width:48px;text-align:center;font-family:'DM Mono',monospace;}
-.lever-pb{display:inline-block;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bd);border-radius:4px;font-size:10px;font-weight:700;padding:1px 6px;font-family:'DM Mono',monospace;margin-top:4px;}
+.lever-pct{font-weight:800;font-size:14px;padding:3px 12px;border-radius:6px;min-width:52px;text-align:center;font-family:'DM Mono',monospace;}
+.lever-foot{font-size:11px;color:var(--dim);margin-top:5px;}
 .lever-btns{display:flex;gap:8px;margin-bottom:16px;}
 .lever-btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;}
 .lever-btn.apply{background:var(--gold);color:#fff;}
@@ -164,7 +169,32 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
 .banner-num-label{font-size:10px;margin-bottom:2px;}
 .banner-num-val{font-family:'DM Mono',monospace;font-weight:700;font-size:17px;}
 
-/* LOADING */
+/* CALCULATION INSPECTOR */
+#inspector{position:fixed;top:0;right:-420px;width:420px;height:100vh;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,0.15);z-index:200;transition:right 0.3s ease;display:flex;flex-direction:column;overflow:hidden;}
+#inspector.open{right:0;}
+#inspector-header{background:var(--navy);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+#inspector-header .title{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;}
+#inspector-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;opacity:0.7;line-height:1;}
+#inspector-close:hover{opacity:1;}
+#inspector-body{flex:1;overflow-y:auto;padding:0;}
+.insp-section{padding:16px 20px;border-bottom:1px solid var(--border);}
+.insp-section-title{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.insp-formula{background:#f8f9fa;border-left:3px solid var(--blue);border-radius:0 6px 6px 0;padding:12px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink2);line-height:1.7;white-space:pre-wrap;}
+.insp-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid #f5f2ee;font-size:12px;}
+.insp-row:last-child{border-bottom:none;}
+.insp-row-label{color:var(--ink2);}
+.insp-row-source{font-size:10px;color:var(--muted);margin-left:6px;}
+.insp-row-val{font-family:'DM Mono',monospace;font-weight:700;color:var(--ink);}
+.insp-arithmetic{background:#fffbeb;border-radius:6px;padding:12px 14px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink2);line-height:1.9;white-space:pre-wrap;}
+.insp-result{background:var(--navy);color:#fff;padding:20px;text-align:center;flex-shrink:0;}
+.insp-result-label{font-size:10px;color:#8a9ab8;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.insp-result-val{font-family:'DM Mono',monospace;font-weight:800;font-size:28px;color:#fbbf24;}
+.insp-result-sub{font-size:12px;color:#8a9ab8;margin-top:4px;}
+.topkpi{cursor:pointer;transition:background 0.15s;}
+.topkpi:hover{background:rgba(255,255,255,0.08);}
+.topkpi.active-insp{background:rgba(255,255,255,0.12);border-bottom:2px solid var(--gold);}
+#inspector-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.2);z-index:199;display:none;}
+#inspector-overlay.open{display:block;}
 .loading-overlay{position:fixed;inset:0;background:rgba(245,242,238,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:12px;}
 .loading-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -186,6 +216,34 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
   <div class="loading-text">Loading cost data...</div>
 </div>
 
+<!-- CALCULATION INSPECTOR -->
+<div id="inspector-overlay" onclick="closeInspector()"></div>
+<div id="inspector">
+  <div id="inspector-header">
+    <div class="title">&#128269; Calculation Inspector</div>
+    <button id="inspector-close" onclick="closeInspector()">&times;</button>
+  </div>
+  <div id="inspector-body">
+    <div class="insp-section">
+      <div class="insp-section-title">&#128196; Formula (Plain English)</div>
+      <div class="insp-formula" id="insp-formula"></div>
+    </div>
+    <div class="insp-section">
+      <div class="insp-section-title">&#128202; Current Values</div>
+      <div id="insp-values"></div>
+    </div>
+    <div class="insp-section">
+      <div class="insp-section-title">&#128290; Step-by-Step Arithmetic</div>
+      <div class="insp-arithmetic" id="insp-arithmetic"></div>
+    </div>
+  </div>
+  <div class="insp-result">
+    <div class="insp-result-label">Final Result</div>
+    <div class="insp-result-val" id="insp-result-val"></div>
+    <div class="insp-result-sub" id="insp-result-sub"></div>
+  </div>
+</div>
+
 <!-- TOP BAR -->
 <div id="topbar">
   <div id="topbar-inner">
@@ -194,11 +252,11 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
       <div class="sub">UVU Equity Staking &middot; H4U Workforce Housing Model &middot; <span id="save-status" class="save-status">connecting...</span></div>
     </div>
     <div id="topbar-kpis">
-      <div class="topkpi"><div class="topkpi-label">Traditional Price</div><div class="topkpi-val red" id="tk-trad">--</div></div>
-      <div class="topkpi"><div class="topkpi-label">H4U Price</div><div class="topkpi-val green" id="tk-h4u">--</div></div>
-      <div class="topkpi"><div class="topkpi-label">Total Savings</div><div class="topkpi-val gold" id="tk-savings">--</div></div>
-      <div class="topkpi"><div class="topkpi-label">H4U PITI/mo</div><div class="topkpi-val blue" id="tk-piti">--</div></div>
-      <div class="topkpi"><div class="topkpi-label">Income Needed</div><div class="topkpi-val white" id="tk-income">--</div></div>
+      <div class="topkpi" id="tkpi-trad" onclick="openInspector('trad')"><div class="topkpi-label">Traditional Price</div><div class="topkpi-val red" id="tk-trad">--</div></div>
+      <div class="topkpi" id="tkpi-h4u" onclick="openInspector('h4u')"><div class="topkpi-label">H4U Price</div><div class="topkpi-val green" id="tk-h4u">--</div></div>
+      <div class="topkpi" id="tkpi-savings" onclick="openInspector('savings')"><div class="topkpi-label">Total Savings</div><div class="topkpi-val gold" id="tk-savings">--</div></div>
+      <div class="topkpi" id="tkpi-piti" onclick="openInspector('piti')"><div class="topkpi-label">H4U PITI/mo</div><div class="topkpi-val blue" id="tk-piti">--</div></div>
+      <div class="topkpi" id="tkpi-income" onclick="openInspector('income')"><div class="topkpi-label">Income Needed</div><div class="topkpi-val white" id="tk-income">--</div></div>
     </div>
     <div id="topbar-actions">
       <button class="action-btn btn-save" onclick="saveFile()">Save File</button>
@@ -214,6 +272,7 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
   <button class="tab-btn active" onclick="switchTab('setup')">Project Setup</button>
   <button class="tab-btn" onclick="switchTab('levers')">H4U Levers</button>
   <button class="tab-btn" onclick="switchTab('results')">Results</button>
+  <button class="tab-btn" onclick="switchTab('cityfees')">City Impact Fees</button>
   <button class="tab-btn" onclick="switchTab('breakdown')">Cost Breakdown</button>
   <button class="tab-btn" onclick="switchTab('mission')">Mission &amp; Guide</button>
 </div>
@@ -221,102 +280,197 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
 <!-- ===== PROJECT SETUP ===== -->
 <div id="tab-setup" class="tab-panel active">
   <div class="wrap">
-    <div class="two-col">
-      <div>
-        <div class="panel">
-          <div class="panel-head">Project Information</div>
-          <div class="panel-body">
-            <div class="section-label">Scale</div>
-            <div class="field">
-              <label>Total Units</label>
-              <div class="input-wrap"><input type="number" id="units" value="104" min="1" oninput="recalc()"></div>
-            </div>
-            <div class="field">
-              <label>Units (drag)</label>
-              <input type="range" id="unitsSlider" min="50" max="300" value="104"
-                oninput="el('units').value=this.value;recalc()">
-            </div>
-            <div class="section-label">Pricing</div>
-            <div class="field">
-              <label>Traditional Sale Price / Unit</label>
-              <div class="input-wrap"><span class="affix">$</span><input type="number" id="salePrice" value="420000" oninput="recalc()"></div>
-              <div class="field-note">Market comparable / appraised value</div>
-            </div>
-            <div class="section-label">H4U Silent Second</div>
-            <div class="field">
-              <label>Silent Second Amount: <span id="ssLabel" style="color:var(--blue);font-family:'DM Mono',monospace">$75,000</span></label>
-              <input type="range" id="silentSecond" min="75000" max="100000" step="1000" value="75000"
-                oninput="el('ssLabel').textContent='$'+(+this.value).toLocaleString();recalc()">
-              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:3px"><span>$75k</span><span>$100k</span></div>
-            </div>
-            <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:6px;padding:8px 12px;font-size:11px;color:var(--blue);margin-bottom:4px">
-              H4U funded &middot; 0% interest &middot; due on sale or refi &middot; subordinated
-            </div>
-          </div>
-        </div>
 
-        <div class="panel">
-          <div class="panel-head">Mortgage Assumptions</div>
-          <div class="panel-body">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-              <div class="field"><label>Rate -- Traditional</label><div class="input-wrap"><input type="number" id="rateTraditional" value="6.75" step="0.125" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>Rate -- H4U (UHC)</label><div class="input-wrap"><input type="number" id="rateH4U" value="6.00" step="0.125" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">Utah Housing Corp rate</div></div>
-              <div class="field"><label>Down Payment</label><div class="input-wrap"><input type="number" id="downPct" value="5" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>Property Tax Rate</label><div class="input-wrap"><input type="number" id="taxRate" value="0.60" step="0.05" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>Insurance Rate</label><div class="input-wrap"><input type="number" id="insRate" value="0.23" step="0.05" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>PMI Rate (&lt;20% down)</label><div class="input-wrap"><input type="number" id="pmiRate" value="1.00" step="0.1" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>DTI Limit</label><div class="input-wrap"><input type="number" id="dtiLimit" value="31" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">FHA front-end guideline</div></div>
-            </div>
-          </div>
+    <!-- Quick Start Banner -->
+    <div style="background:var(--navy);border-radius:12px;padding:20px 24px;margin-bottom:20px;color:#fff">
+      <div style="font-weight:800;font-size:15px;margin-bottom:12px">&#128640; Quick Start &mdash; How to build your scenario in 4 steps</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="background:var(--gold);color:#fff;font-weight:800;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div><div style="font-weight:700;font-size:13px">Select your city</div></div>
+          <div style="font-size:12px;color:#8a9ab8;line-height:1.5">Go to the City Impact Fees tab to load fees for your city into the model.</div>
         </div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="background:var(--gold);color:#fff;font-weight:800;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div><div style="font-weight:700;font-size:13px">Edit project details</div></div>
+          <div style="font-size:12px;color:#8a9ab8;line-height:1.5">Update project name, parcel, units, and any cost line items to match your development.</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="background:var(--gold);color:#fff;font-weight:800;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div><div style="font-weight:700;font-size:13px">Adjust H4U Levers</div></div>
+          <div style="font-size:12px;color:#8a9ab8;line-height:1.5">Move the sliders on the H4U Levers tab to show which savings strategies the city will enable.</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="background:var(--gold);color:#fff;font-weight:800;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div><div style="font-weight:700;font-size:13px">Review &amp; share Results</div></div>
+          <div style="font-size:12px;color:#8a9ab8;line-height:1.5">Go to the Results tab &mdash; print or save as PDF to share with city leaders.</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:#8a9ab8">&#128190; Use <strong style="color:#fff">Save File</strong> (top right) to download your scenario as a file and reload it later. No account needed.</div>
+    </div>
 
-        <div class="panel">
-          <div class="panel-head">Construction Financing</div>
-          <div class="panel-body">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-              <div class="field"><label>Construction Loan Rate</label><div class="input-wrap"><input type="number" id="constRate" value="8.5" step="0.25" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>Construction Period (mo)</label><div class="input-wrap"><input type="number" id="constMonths" value="18" oninput="recalc()"></div></div>
-              <div class="field"><label>LTV (loan-to-cost)</label><div class="input-wrap"><input type="number" id="ltv" value="65" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>Contingency</label><div class="input-wrap"><input type="number" id="pctCont" value="15" step="1" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>Project Management</label><div class="input-wrap"><input type="number" id="pctMgmt" value="4" step="0.5" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>Marketing (% of sale)</label><div class="input-wrap"><input type="number" id="pctMkt" value="3" step="0.5" oninput="recalc()"><span class="affix right">%</span></div></div>
-              <div class="field"><label>Realtor (% of sale)</label><div class="input-wrap"><input type="number" id="pctRealtor" value="3" step="0.5" oninput="recalc()"><span class="affix right">%</span></div></div>
-            </div>
+    <div style="background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:8px;padding:10px 16px;margin-bottom:16px;font-size:12px;color:var(--amber)">
+      &#9998; All fields on this page are editable. Change any value and the model updates automatically across all tabs. Click <strong>Save File</strong> in the top bar to keep your work.
+    </div>
+
+    <!-- PROJECT INFORMATION -->
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-head">&#128203; Project Information</div>
+      <div class="panel-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px">
+          <div class="field"><label>Project Name</label><div class="input-wrap"><input type="text" id="projName" value="Halvorsen Ridge" oninput="recalc()"></div></div>
+          <div class="field"><label>City / Jurisdiction</label><div class="input-wrap"><input type="text" id="projCity" value="Spanish Fork, UT" oninput="recalc()"></div></div>
+          <div class="field"><label>Parcel Number (APN)</label><div class="input-wrap"><input type="text" id="projParcel" value="25:068:0178" oninput="recalc()"></div><div class="field-note">Utah County serial format</div></div>
+          <div class="field"><label>Project Address</label><div class="input-wrap"><input type="text" id="projAddress" value="Spanish Fork, UT 84660" oninput="recalc()"></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:14px">
+          <div class="field"><label>Total Units</label><div class="input-wrap"><input type="number" id="units" value="104" min="1" oninput="recalc()"></div><div class="field-note">Total homes in development</div></div>
+          <div class="field"><label>Home Size (sq ft)</label><div class="input-wrap"><input type="number" id="homeSqft" value="1800" oninput="calcVertical()"></div></div>
+          <div class="field"><label>Cost per sq ft</label><div class="input-wrap"><span class="affix">$</span><input type="number" id="costPerSqft" value="250" step="5" oninput="calcVertical()"></div><div class="field-note">Vertical construction $/sqft</div></div>
+          <div class="field"><label>Site Acreage</label><div class="input-wrap"><input type="number" id="siteAcreage" value="12.73" step="0.01" oninput="recalc()"></div></div>
+          <div class="field"><label>Zoning Code</label><div class="input-wrap"><input type="text" id="zoningCode" value="R-1-6" oninput="recalc()"></div><div class="field-note">E.g. R-1-6, R-1-8, MU</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 3fr;gap:14px;margin-top:14px">
+          <div class="field"><label>Fiscal Year</label><div class="input-wrap"><input type="number" id="fiscalYear" value="2026" oninput="recalc()"></div></div>
+          <div class="field"><label>Average CMA / Sale Price per Unit</label><div class="input-wrap"><span class="affix">$</span><input type="number" id="salePrice" value="420000" oninput="recalc()"></div><div class="field-note">Market comparable / appraised value -- used for 3% commission calculation and consumer pricing output</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRADITIONAL DEVELOPMENT COST STACK -->
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-head">
+        <span>&#128201; Traditional Development Cost Stack</span>
+        <span style="font-size:10px;font-weight:400;color:var(--muted)">per unit &mdash; adjust all dollar amounts here</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="background:var(--navy);color:#fff">
+            <th style="padding:10px 16px;text-align:left;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600">Cost Category</th>
+            <th style="padding:10px 16px;text-align:right;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600;width:160px">Per Unit ($)</th>
+            <th style="padding:10px 16px;text-align:left;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600">H4U Lever</th>
+            <th style="padding:10px 16px;text-align:left;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:10px 16px;color:var(--ink2)">Land &amp; Acquisition (per lot)</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_land" value="48077" oninput="onSetupCostChange('land',this,'project')" style="width:130px"></td>
+            <td style="padding:10px 16px"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">City/RDA Land Partnership</span></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">Utah County ~$175K/acre</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--surface2)">
+            <td style="padding:10px 16px;color:var(--ink2)">Option / Carry Cost</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_option" value="18000" oninput="recalc()" style="width:130px"></td>
+            <td style="padding:10px 16px"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Option Agreement Strategy</span></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">Milestone-based take-down</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:10px 16px;color:var(--ink2)">Entitlement &amp; Engineering</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_entitlement" value="12000" oninput="recalc()" style="width:130px"></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">No H4U lever</td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">Utah County standard</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--surface2)">
+            <td style="padding:10px 16px;color:var(--ink2)">City Impact Fees</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_impactfees" value="20997" oninput="recalc()" style="width:130px;border-color:var(--blue)"></td>
+            <td style="padding:10px 16px"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Impact Fee Waiver/Deferral</span></td>
+            <td style="padding:10px 16px;color:var(--blue);font-size:12px;font-weight:600">Auto-fills from City Fees tab</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:10px 16px;color:var(--ink2)">Horizontal Development</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_horizontal" value="28000" oninput="onSetupCostChange('horizontal',this,'unit')" style="width:130px"></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">No H4U lever</td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">$45-65K/lot range</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--surface2)">
+            <td style="padding:10px 16px;color:var(--ink2)">Vertical Construction</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_vertical" value="185000" oninput="onSetupCostChange('vertical',this,'unit')" style="width:130px"></td>
+            <td style="padding:10px 16px"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Bulk / Design / Tax Levers</span></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">$<span id="sqft-cost-note">250</span>/sqft &times; <span id="sqft-note">1,800</span> sqft = <span id="sqft-calc-note" style="color:var(--blue);font-weight:600">$450,000</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:10px 16px;color:var(--ink2)">Construction Financing &amp; Carry</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_carry" value="" readonly style="width:130px;background:var(--surface2);color:var(--amber);font-weight:700" title="Calculated from financing assumptions"></td>
+            <td style="padding:10px 16px"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Rate + Pre-Sales Strategy</span></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px"><span id="carry-note">8.5% loan ~18mo build</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--surface2)">
+            <td style="padding:10px 16px;color:var(--ink2)">Developer G&amp;A + Profit (<span id="mgmt-pct-note">4</span>%)</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_profit" value="" readonly style="width:130px;background:var(--surface2);color:var(--amber);font-weight:700" title="Calculated from % assumption"></td>
+            <td style="padding:10px 16px"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Eliminate Dev. Profit</span></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">H4U is nonprofit</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:10px 16px;color:var(--ink2)">Sales, Marketing &amp; Commissions</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_marketing" value="" readonly style="width:130px;background:var(--surface2);color:var(--amber);font-weight:700" title="Calculated from % assumption"></td>
+            <td style="padding:10px 16px"><span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Community Advocate Network</span></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">3% commission + marketing</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--surface2)">
+            <td style="padding:10px 16px;color:var(--ink2)">Contingency (<span id="cont-pct-note">15</span>%)</td>
+            <td style="padding:8px 16px;text-align:right"><input class="cost-input" type="number" id="cs_contingency" value="" readonly style="width:130px;background:var(--surface2);color:var(--amber);font-weight:700" title="Calculated from % assumption"></td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">No H4U lever</td>
+            <td style="padding:10px 16px;color:var(--muted);font-size:12px">Industry standard</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr style="background:var(--navy);color:#fff">
+            <td style="padding:12px 16px;font-weight:700;font-size:14px">TRADITIONAL TOTAL (per unit)</td>
+            <td style="padding:12px 16px;text-align:right;font-family:'DM Mono',monospace;font-weight:700;font-size:16px;color:#fbbf24" id="cs-total">--</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- MORTGAGE ASSUMPTIONS -->
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-head">&#127968; Mortgage Assumptions <span style="font-size:10px;font-weight:400;margin-left:8px">used in affordability calculations</span></div>
+      <div class="panel-body">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px">
+          <div class="field"><label>Interest Rate -- Traditional</label><div class="input-wrap"><input type="number" id="rateTraditional" value="6.75" step="0.125" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">Percent (e.g. 6.75 = 6.75%)</div></div>
+          <div class="field"><label>Interest Rate -- H4U (UHC)</label><div class="input-wrap"><input type="number" id="rateH4U" value="6.00" step="0.125" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">Utah Housing Corp preferred rate</div></div>
+          <div class="field"><label>Down Payment (%)</label><div class="input-wrap"><input type="number" id="downPct" value="5" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">FHA allows 3.5%; conventional min 3%</div></div>
+          <div class="field"><label>Property Tax Rate (%)</label><div class="input-wrap"><input type="number" id="taxRate" value="0.60" step="0.05" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">Utah County effective rate ~0.60%</div></div>
+          <div class="field"><label>Insurance Rate (%)</label><div class="input-wrap"><input type="number" id="insRate" value="0.23" step="0.05" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">Annual homeowner's insurance</div></div>
+          <div class="field"><label>PMI Rate (if &lt;20% down)</label><div class="input-wrap"><input type="number" id="pmiRate" value="1.00" step="0.1" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">1.0% of loan amount/year</div></div>
+          <div class="field"><label>DTI Limit (%)</label><div class="input-wrap"><input type="number" id="dtiLimit" value="31" oninput="recalc()"><span class="affix right">%</span></div><div class="field-note">31% = FHA front-end guideline</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H4U SILENT SECOND + CONSTRUCTION -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="panel">
+        <div class="panel-head">H4U Silent Second Lien</div>
+        <div class="panel-body">
+          <div class="field">
+            <label>Silent Second Amount: <span id="ssLabel" style="color:var(--blue);font-family:'DM Mono',monospace;font-weight:700">$75,000</span></label>
+            <input type="range" id="silentSecond" min="75000" max="100000" step="1000" value="75000"
+              oninput="el('ssLabel').textContent='$'+(+this.value).toLocaleString();recalc()">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:3px"><span>$75,000</span><span>$100,000</span></div>
+          </div>
+          <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:6px;padding:8px 12px;font-size:11px;color:var(--blue)">
+            H4U funded &middot; 0% interest &middot; due on sale or refi &middot; subordinated to first mortgage
           </div>
         </div>
       </div>
-
-      <!-- RIGHT: SETUP KPIs -->
-      <div>
-        <div class="kpi-grid">
-          <div class="kpi red"><div class="kpi-label">Traditional Price</div><div class="kpi-val" id="s-trad">--</div><div class="kpi-sub">per unit, all costs</div></div>
-          <div class="kpi green"><div class="kpi-label">H4U Net Price</div><div class="kpi-val" id="s-h4u">--</div><div class="kpi-sub" id="s-h4u-sub">with levers applied</div></div>
-          <div class="kpi amber"><div class="kpi-label">Total Savings</div><div class="kpi-val" id="s-savings">--</div><div class="kpi-sub" id="s-savings-pct">reduction</div></div>
-          <div class="kpi blue"><div class="kpi-label">H4U PITI / mo</div><div class="kpi-val" id="s-piti">--</div><div class="kpi-sub" id="s-income">income req.</div></div>
-        </div>
-        <div class="panel">
-          <div class="panel-head">Quick Start -- How to use this dashboard</div>
-          <div class="panel-body">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              ${[
-                ['1','Project Setup','Enter units, sale price, and financing assumptions. All fields update the model live.'],
-                ['2','H4U Levers','Drag the 10 savings sliders to show which strategies the city will enable.'],
-                ['3','Results','View the full side-by-side comparison with charts, waterfall, and affordability table.'],
-                ['4','Cost Breakdown','Edit every line item cost. Changes save automatically to Supabase.'],
-              ].map(([n,t,d])=>`<div style="background:var(--surface2);border-radius:8px;padding:12px 14px">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-                  <div style="background:var(--gold);color:#fff;font-weight:800;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center">${n}</div>
-                  <div style="font-weight:700;font-size:13px">${t}</div>
-                </div>
-                <div style="font-size:12px;color:var(--muted)">${d}</div>
-              </div>`).join('')}
-            </div>
+      <div class="panel">
+        <div class="panel-head">Construction Financing</div>
+        <div class="panel-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="field"><label>Construction Loan Rate</label><div class="input-wrap"><input type="number" id="constRate" value="8.5" step="0.25" oninput="recalc()"><span class="affix right">%</span></div></div>
+            <div class="field"><label>Construction Period (mo)</label><div class="input-wrap"><input type="number" id="constMonths" value="18" oninput="recalc()"></div></div>
+            <div class="field"><label>LTV (loan-to-cost)</label><div class="input-wrap"><input type="number" id="ltv" value="65" oninput="recalc()"><span class="affix right">%</span></div></div>
+            <div class="field"><label>Contingency %</label><div class="input-wrap"><input type="number" id="pctCont" value="15" step="1" oninput="recalc()"><span class="affix right">%</span></div></div>
+            <div class="field"><label>Project Mgmt %</label><div class="input-wrap"><input type="number" id="pctMgmt" value="4" step="0.5" oninput="recalc()"><span class="affix right">%</span></div></div>
+            <div class="field"><label>Marketing % of sale</label><div class="input-wrap"><input type="number" id="pctMkt" value="3" step="0.5" oninput="recalc()"><span class="affix right">%</span></div></div>
+            <div class="field"><label>Realtor % of sale</label><div class="input-wrap"><input type="number" id="pctRealtor" value="3" step="0.5" oninput="recalc()"><span class="affix right">%</span></div></div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 </div>
+
 
 <!-- ===== H4U LEVERS ===== -->
 <div id="tab-levers" class="tab-panel">
@@ -376,6 +530,70 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
   </div>
 </div>
 
+<!-- ===== CITY IMPACT FEES ===== -->
+<div id="tab-cityfees" class="tab-panel">
+  <div class="wrap">
+    <div style="background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:8px;padding:10px 16px;margin-bottom:16px;font-size:12px;color:var(--amber)">
+      Select a city to load its impact fees. Edit any amount directly. Click <strong>Apply to Model</strong> to push the fees into the Cost Breakdown and recalculate.
+      &nbsp;&middot;&nbsp; <span style="color:var(--green)">&#10003; verified</span> = confirmed from city source &nbsp;&middot;&nbsp; <span style="color:var(--amber)">&#9651; estimated</span> = verify before presenting.
+    </div>
+    <div class="panel">
+      <div class="panel-head">City Impact Fee Schedule</div>
+      <div class="panel-body">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+          <select id="city-select" onchange="loadCity()" style="padding:8px 14px;border-radius:7px;border:1px solid var(--border);background:var(--bg);font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);cursor:pointer;min-width:200px">
+            <option value="">-- Select a Utah County City --</option>
+            <option value="alpine">Alpine</option>
+            <option value="american_fork">American Fork</option>
+            <option value="cedar_hills">Cedar Hills</option>
+            <option value="eagle_mountain">Eagle Mountain</option>
+            <option value="highland">Highland</option>
+            <option value="lehi">Lehi</option>
+            <option value="lindon">Lindon</option>
+            <option value="mapleton">Mapleton</option>
+            <option value="orem">Orem</option>
+            <option value="payson">Payson</option>
+            <option value="pleasant_grove">Pleasant Grove</option>
+            <option value="provo">Provo</option>
+            <option value="santaquin">Santaquin</option>
+            <option value="saratoga_springs">Saratoga Springs</option>
+            <option value="spanish_fork">Spanish Fork &#10003;</option>
+            <option value="springville">Springville</option>
+            <option value="vineyard">Vineyard</option>
+          </select>
+          <button onclick="applyToModel()" style="padding:8px 18px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+            &#10003; Apply to Model
+          </button>
+          <span id="city-source-note" style="font-size:12px;color:var(--muted)"></span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:var(--navy);color:#fff">
+              <th style="padding:10px 16px;text-align:left;font-size:11px;letter-spacing:0.5px;text-transform:uppercase">Fee Category</th>
+              <th style="padding:10px 16px;text-align:right;font-size:11px;letter-spacing:0.5px;text-transform:uppercase">Amount (editable)</th>
+              <th style="padding:10px 16px;text-align:left;font-size:11px;letter-spacing:0.5px;text-transform:uppercase">Notes</th>
+            </tr>
+          </thead>
+          <tbody id="city-fee-tbody"></tbody>
+          <tfoot>
+            <tr style="background:var(--navy);color:#fff">
+              <td style="padding:12px 16px;font-weight:700;font-size:14px">TOTAL IMPACT FEES / UNIT</td>
+              <td style="padding:12px 16px;text-align:right;font-family:'DM Mono',monospace;font-weight:700;font-size:16px;color:#fbbf24" id="city-fee-total">--</td>
+              <td style="padding:12px 16px;font-size:12px;color:#fbbf24">Per single-family unit</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Comparison bar chart -->
+    <div class="panel">
+      <div class="panel-head">Impact Fee Comparison -- Utah County Cities (Total / Unit)</div>
+      <div class="panel-body"><canvas id="chart-city-compare" height="120"></canvas></div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== COST BREAKDOWN ===== -->
 <div id="tab-breakdown" class="tab-panel">
   <div class="wrap">
@@ -409,8 +627,9 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
       <div style="font-size:20px;font-weight:800;margin-bottom:10px">Our Mission</div>
       <div style="color:#cbd5e1;line-height:1.7;font-size:14px">H4U (HomeOwnership4U) exists to close the homeownership gap for Utah County working families. We partner directly with cities to apply a proven, data-driven playbook that removes unnecessary cost from the development process -- so a family earning $100K--$150K can actually afford to buy a home in the community where they work.</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px">
-        ${[['City Partnership','RDA land, fee waivers & policy tools'],['H4U Playbook','10 proven cost-reduction strategies'],['Workforce Housing','Real ownership for $100K--$150K families']]
-          .map(([t,d])=>`<div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px;text-align:center"><div style="font-weight:700;color:var(--gold);margin-bottom:4px">${t}</div><div style="font-size:12px;color:#8a9ab8">${d}</div></div>`).join('')}
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px;text-align:center"><div style="font-weight:700;color:var(--gold);margin-bottom:4px">City Partnership</div><div style="font-size:12px;color:#8a9ab8">RDA land, fee waivers &amp; policy tools</div></div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px;text-align:center"><div style="font-weight:700;color:var(--gold);margin-bottom:4px">H4U Playbook</div><div style="font-size:12px;color:#8a9ab8">10 proven cost-reduction strategies</div></div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:8px;padding:14px;text-align:center"><div style="font-weight:700;color:var(--gold);margin-bottom:4px">Workforce Housing</div><div style="font-size:12px;color:#8a9ab8">Real ownership for $100K--$150K families</div></div>
       </div>
     </div>
     <div class="panel">
@@ -423,13 +642,12 @@ input[type="range"]{width:100%;accent-color:var(--green);cursor:pointer;}
       <div class="panel-head">Key Terms Explained</div>
       <div class="panel-body">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          ${[['PITI','Principal + Interest + Taxes + Insurance -- the total monthly housing payment lenders use to qualify borrowers.'],
-             ['DTI','Debt-to-Income Ratio -- the percentage of gross monthly income toward housing. FHA front-end guideline is 31%.'],
-             ['Traditional Price','The all-in cost to build a home using current market practices -- land, fees, construction, financing, profit, and marketing.'],
-             ['H4U Net Price','The reduced home price after applying H4U Playbook levers. This is what a working family would actually pay at closing.'],
-             ['RDA','Redevelopment Agency -- a city tool using tax increment financing to subsidize land costs for workforce housing.'],
-             ['Silent Second Lien','A 0% subordinated loan that reduces the buyer\'s first mortgage without increasing monthly payments to a servicer.'],
-          ].map(([t,d])=>`<div style="background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="font-weight:700;color:var(--blue);margin-bottom:4px">${t}</div><div style="font-size:12px;color:var(--muted);line-height:1.6">${d}</div></div>`).join('')}
+          <div style="background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="font-weight:700;color:var(--blue);margin-bottom:4px">PITI</div><div style="font-size:12px;color:var(--muted);line-height:1.6">Principal + Interest + Taxes + Insurance -- the total monthly housing payment lenders use to qualify borrowers.</div></div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="font-weight:700;color:var(--blue);margin-bottom:4px">DTI</div><div style="font-size:12px;color:var(--muted);line-height:1.6">Debt-to-Income Ratio -- the percentage of gross monthly income toward housing. FHA front-end guideline is 31%.</div></div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="font-weight:700;color:var(--blue);margin-bottom:4px">Traditional Price</div><div style="font-size:12px;color:var(--muted);line-height:1.6">The all-in cost to build a home using current market practices -- land, fees, construction, financing, profit, and marketing.</div></div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="font-weight:700;color:var(--blue);margin-bottom:4px">H4U Net Price</div><div style="font-size:12px;color:var(--muted);line-height:1.6">The reduced home price after applying H4U Playbook levers. This is what a working family would actually pay at closing.</div></div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="font-weight:700;color:var(--blue);margin-bottom:4px">RDA</div><div style="font-size:12px;color:var(--muted);line-height:1.6">Redevelopment Agency -- a city tool using tax increment financing to subsidize land costs for workforce housing.</div></div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="font-weight:700;color:var(--blue);margin-bottom:4px">Silent Second Lien</div><div style="font-size:12px;color:var(--muted);line-height:1.6">A 0% subordinated loan that reduces the buyer's first mortgage without increasing monthly payments to a servicer.</div></div>
         </div>
       </div>
     </div>
@@ -554,7 +772,7 @@ function setSS(cls,msg){const e=el('save-status');e.className='save-status '+(cl
 
 // ── SAVE / LOAD FILE ──────────────────────────────────────────────────────────
 function saveFile(){
-  const data={costs,levers,settings:{units:val('units'),salePrice:val('salePrice'),rateTraditional:val('rateTraditional'),rateH4U:val('rateH4U'),downPct:val('downPct'),taxRate:val('taxRate'),insRate:val('insRate'),pmiRate:val('pmiRate'),dtiLimit:val('dtiLimit'),constRate:val('constRate'),constMonths:val('constMonths'),ltv:val('ltv'),pctCont:val('pctCont'),pctMgmt:val('pctMgmt'),pctMkt:val('pctMkt'),pctRealtor:val('pctRealtor'),silentSecond:parseFloat(el('silentSecond').value)||75000}};
+  const data={costs,levers,settings:{units:val('units'),salePrice:val('salePrice'),homeSqft:val('homeSqft'),costPerSqft:val('costPerSqft'),rateTraditional:val('rateTraditional'),rateH4U:val('rateH4U'),downPct:val('downPct'),taxRate:val('taxRate'),insRate:val('insRate'),pmiRate:val('pmiRate'),dtiLimit:val('dtiLimit'),constRate:val('constRate'),constMonths:val('constMonths'),ltv:val('ltv'),pctCont:val('pctCont'),pctMgmt:val('pctMgmt'),pctMkt:val('pctMkt'),pctRealtor:val('pctRealtor'),silentSecond:parseFloat(el('silentSecond').value)||75000}};
   const a=document.createElement('a');a.href='data:application/json,'+encodeURIComponent(JSON.stringify(data,null,2));a.download='h4u-scenario.json';a.click();
 }
 function loadFile(){el('file-input').click();}
@@ -565,7 +783,7 @@ function onFileLoad(e){
       const d=JSON.parse(ev.target.result);
       if(d.costs)Object.assign(costs,d.costs);
       if(d.levers)Object.assign(levers,d.levers);
-      if(d.settings){const s=d.settings;['units','salePrice','rateTraditional','rateH4U','downPct','taxRate','insRate','pmiRate','dtiLimit','constRate','constMonths','ltv','pctCont','pctMgmt','pctMkt','pctRealtor'].forEach(k=>{if(s[k]!==undefined&&el(k))el(k).value=s[k];});if(s.silentSecond){el('silentSecond').value=s.silentSecond;el('ssLabel').textContent='$'+Math.round(s.silentSecond).toLocaleString();}}
+      if(d.settings){const s=d.settings;['units','salePrice','homeSqft','costPerSqft','rateTraditional','rateH4U','downPct','taxRate','insRate','pmiRate','dtiLimit','constRate','constMonths','ltv','pctCont','pctMgmt','pctMkt','pctRealtor'].forEach(k=>{if(s[k]!==undefined&&el(k))el(k).value=s[k];});if(s.silentSecond){el('silentSecond').value=s.silentSecond;el('ssLabel').textContent='$'+Math.round(s.silentSecond).toLocaleString();}}
       recalc();setSS('saved','scenario loaded');setTimeout(()=>setSS('','connected'),2000);
     }catch(err){setSS('error','invalid file');}
   };r.readAsText(f);
@@ -573,13 +791,14 @@ function onFileLoad(e){
 
 // ── TAB SWITCH ────────────────────────────────────────────────────────────────
 function switchTab(name){
-  ['setup','levers','results','breakdown','mission'].forEach(t=>{
+  ['setup','levers','results','cityfees','breakdown','mission'].forEach(t=>{
     el('tab-'+t).classList.toggle('active',t===name);
   });
   document.querySelectorAll('.tab-btn').forEach((b,i)=>{
-    b.classList.toggle('active',['setup','levers','results','breakdown','mission'][i]===name);
+    b.classList.toggle('active',['setup','levers','results','cityfees','breakdown','mission'][i]===name);
   });
   if(name==='results')updateCharts();
+  if(name==='cityfees')updateCityCompareChart();
 }
 
 // ── LEVER CONTROLS ────────────────────────────────────────────────────────────
@@ -611,41 +830,72 @@ function maxAffordable(income,rate,dp,tax,ins,pmi,dti){
 
 // ── BUILD LEVERS UI ───────────────────────────────────────────────────────────
 function buildLeversUI(calc){
+  // Vibrant color palette per lever
+  const COLORS = [
+    {bg:'#1e3a5f', accent:'#3b82f6', light:'#eff6ff', border:'#bfdbfe'},  // 1 land - deep blue
+    {bg:'#1a3a2a', accent:'#22c55e', light:'#f0fdf4', border:'#bbf7d0'},  // 2 option - deep green
+    {bg:'#7c2d12', accent:'#f97316', light:'#fff7ed', border:'#fed7aa'},  // 3 impact - orange
+    {bg:'#1e1b4b', accent:'#8b5cf6', light:'#f5f3ff', border:'#ddd6fe'},  // 4 bulk - purple
+    {bg:'#0c4a6e', accent:'#0ea5e9', light:'#f0f9ff', border:'#bae6fd'},  // 5 design - sky
+    {bg:'#14532d', accent:'#16a34a', light:'#f0fdf4', border:'#86efac'},  // 6 salesTax - emerald
+    {bg:'#422006', accent:'#d97706', light:'#fffbeb', border:'#fde68a'},  // 7 loanRate - amber
+    {bg:'#1e3a5f', accent:'#2563eb', light:'#eff6ff', border:'#93c5fd'},  // 8 preSales - blue
+    {bg:'#450a0a', accent:'#ef4444', light:'#fef2f2', border:'#fecaca'},  // 9 profit - red
+    {bg:'#2d1b69', accent:'#7c3aed', light:'#f5f3ff', border:'#c4b5fd'},  // 10 marketing - violet
+  ];
+  const MAX_LABELS = ['100%','100%','100%','15%','10%','1.5%','30%','100%','100%','70%'];
+
   const c=el('levers-container');
   c.innerHTML='';
   LEVER_DEFS.forEach((l,i)=>{
+    const col=COLORS[i];
     const maxSav=l.maxFn(calc);
     const appliedSav=maxSav*(levers[l.key]/100);
+    const pctVal=levers[l.key];
+
     const div=document.createElement('div');
     div.className='lever-card';
+    div.style.border=`1px solid ${col.border}`;
     div.innerHTML=`
-      <div class="lever-top">
-        <div class="lever-left">
-          <div class="lever-name">${i+1}. ${l.label}</div>
+      <div class="lever-header">
+        <div class="lever-num" style="background:${col.bg};width:60px">${i+1}</div>
+        <div class="lever-meta">
+          <div class="lever-name">${l.label}</div>
           <div class="lever-desc">${l.desc}</div>
-          <div class="lever-pb">${l.pb}</div>
+          <div class="lever-pb" style="background:${col.light};color:${col.accent};border:1px solid ${col.border}">${l.pb}</div>
         </div>
-        <div class="lever-right">
-          <div class="lever-savings" id="lsav_${l.key}">${fmt(appliedSav)}</div>
-          <div class="lever-max">Max: ${fmt(maxSav)}</div>
+        <div class="lever-savings-block" style="background:${col.light}">
+          <div style="font-size:10px;color:${col.accent};font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:3px">SAVINGS</div>
+          <div class="lever-savings" style="color:${col.accent}" id="lsav_${l.key}">${fmt(appliedSav)}</div>
+          <div class="lever-max" id="lmax_${l.key}">Max: ${fmt(maxSav)}</div>
         </div>
       </div>
-      <div class="lever-controls">
-        <input type="range" min="0" max="100" value="${levers[l.key]}" id="sldr_${l.key}"
-          oninput="levers['${l.key}']=+this.value;el('lpct_${l.key}').textContent=this.value+'%';recalc()">
-        <div class="lever-pct" id="lpct_${l.key}">${levers[l.key]}%</div>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">Max reduction: ${l.key==='bulk'?'15%':l.key==='design'?'10%':l.key==='salesTax'?'1.5%':l.key==='loanRate'?'30%':l.key==='marketing'?'70%':'100%'} of base cost</div>`;
+      <div class="lever-body">
+        <div class="lever-controls">
+          <input type="range" min="0" max="100" value="${pctVal}" id="sldr_${l.key}"
+            style="accent-color:${col.accent};flex:1"
+            oninput="levers['${l.key}']=+this.value;el('lpct_${l.key}').textContent=this.value+'%';recalc()">
+          <div class="lever-pct" id="lpct_${l.key}"
+            style="background:${col.light};color:${col.accent};border:1px solid ${col.border}">${pctVal}%</div>
+        </div>
+        <div class="lever-foot">Max reduction: ${MAX_LABELS[i]} of base cost</div>
+      </div>`;
     c.appendChild(div);
   });
 
   // Mission levers
   const mc=el('mission-levers');
-  if(mc){mc.innerHTML=LEVER_DEFS.map(l=>`<div style="background:var(--surface2);border-radius:8px;padding:12px 14px">
-    <div style="font-weight:700;color:var(--blue);margin-bottom:4px">${l.label}</div>
-    <div class="lever-pb" style="margin-bottom:6px">${l.pb}</div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.6">${l.desc}</div>
-  </div>`).join('');}
+  if(mc){mc.innerHTML=LEVER_DEFS.map((l,i)=>{
+    const col=COLORS[i];
+    return `<div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border-left:4px solid ${col.accent}">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="background:${col.bg};color:#fff;font-weight:900;font-size:11px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</div>
+        <div style="font-weight:700;color:${col.accent};font-size:13px">${l.label}</div>
+      </div>
+      <div style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;display:inline-block;background:${col.light};color:${col.accent};border:1px solid ${col.border};font-family:'DM Mono',monospace;margin-bottom:5px">${l.pb}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">${l.desc}</div>
+    </div>`;
+  }).join('');}
 }
 
 // ── CHARTS ────────────────────────────────────────────────────────────────────
@@ -776,7 +1026,7 @@ function recalc(){
   const pctRealtor_=val('pctRealtor');
   const ssAmt     =parseFloat(el('silentSecond').value)||75000;
 
-  el('unitsSlider').value=units;
+  if(el('unitsSlider'))el('unitsSlider').value=units;
 
   const cpd=(ltv_/100)*(constRate_/100)*(constMo/12);
 
@@ -835,12 +1085,7 @@ function recalc(){
   el('tk-income').textContent=fmt(pitiH4U.incomeReq);
 
   // ── SETUP TAB ──
-  el('s-trad').textContent=fmt(tradPrice);
-  el('s-h4u').textContent=fmt(h4uPrice);
-  el('s-savings').textContent=fmt(savings);
-  el('s-savings-pct').textContent=pct(savingsPct)+' reduction';
-  el('s-piti').textContent=fmt(pitiH4U.total)+'/mo';
-  el('s-income').textContent=fmt(pitiH4U.incomeReq)+' req.';
+  syncSetupCostTable({units,carryTotal:totalCarry,mgmtAmt,mktAmt,realtorAmt,contAmt,tradPrice});
 
   // ── LEVERS TAB ──
   buildLeversUI(calcCtx);
@@ -884,6 +1129,249 @@ function recalc(){
 
   // Update charts if results tab is visible
   if(el('tab-results').classList.contains('active'))updateCharts();
+}
+
+// ── SETUP TAB COST SYNC ───────────────────────────────────────────────────────
+// When user edits land/horizontal/vertical in the setup tab, sync to costs object
+function calcVertical(){
+  const sqft = parseFloat(el('homeSqft').value) || 1800;
+  const cpp  = parseFloat(el('costPerSqft').value) || 250;
+  const vert = Math.round(sqft * cpp);
+  // Update cost line
+  costs['vertical'] = vert;
+  // Sync the setup table input
+  if(el('cs_vertical')) el('cs_vertical').value = vert;
+  // Update the note
+  if(el('sqft-cost-note')) el('sqft-cost-note').textContent = cpp.toLocaleString();
+  if(el('sqft-note'))      el('sqft-note').textContent = sqft.toLocaleString();
+  if(el('sqft-calc-note')) el('sqft-calc-note').textContent = fmt(vert);
+  recalc();
+}
+
+
+  const v = parseFloat(inputEl.value)||0;
+  if(type==='project') costs[id] = v * (parseInt(el('units').value)||104);
+  else costs[id] = v;
+  recalc();
+}
+
+// Sync setup tab simplified fields from costs object and calculated values
+function syncSetupCostTable(calc){
+  const units = calc.units;
+  // Editable fields -- show per-unit values
+  if(el('cs_land')) el('cs_land').value = Math.round((costs['land']||0)/units);
+  if(el('cs_horizontal')) el('cs_horizontal').value = Math.round(costs['horizontal']||0);
+  if(el('cs_vertical')) el('cs_vertical').value = Math.round(costs['vertical']||0);
+  // Impact fees sum
+  const impactTotal = ['fee_power','fee_storm','fee_water','fee_irrigation','fee_wastewater','fee_safety','fee_transportation','fee_parks'].reduce((s,k)=>s+(costs[k]||0),0);
+  if(el('cs_impactfees')) el('cs_impactfees').value = Math.round(impactTotal);
+  // Calculated (read-only)
+  if(el('cs_carry')) el('cs_carry').value = Math.round(calc.carryTotal);
+  if(el('cs_profit')) el('cs_profit').value = Math.round(calc.mgmtAmt);
+  if(el('cs_marketing')) el('cs_marketing').value = Math.round(calc.mktAmt+calc.realtorAmt);
+  if(el('cs_contingency')) el('cs_contingency').value = Math.round(calc.contAmt);
+  if(el('cs_total')) el('cs_total').textContent = fmt(calc.tradPrice);
+  if(el('carry-note')) el('carry-note').textContent = val('constRate')+'% loan ~'+val('constMonths')+'mo build';
+  if(el('mgmt-pct-note')) el('mgmt-pct-note').textContent = val('pctMgmt');
+  if(el('cont-pct-note')) el('cont-pct-note').textContent = val('pctCont');
+  if(el('sqft-cost-note')) el('sqft-cost-note').textContent = (val('costPerSqft')||250).toLocaleString();
+  if(el('sqft-note'))      el('sqft-note').textContent = (val('homeSqft')||1800).toLocaleString();
+  if(el('sqft-calc-note')) el('sqft-calc-note').textContent = fmt((val('costPerSqft')||250)*(val('homeSqft')||1800));
+}
+
+
+// ── CALCULATION INSPECTOR ─────────────────────────────────────────────────────
+let activeInspector = null;
+
+function openInspector(type) {
+  const calc = window._lastCalc;
+  if (!calc) return;
+  activeInspector = type;
+
+  document.querySelectorAll('.topkpi').forEach(k => k.classList.remove('active-insp'));
+  const kpiMap = {trad:'tkpi-trad',h4u:'tkpi-h4u',savings:'tkpi-savings',piti:'tkpi-piti',income:'tkpi-income'};
+  if (kpiMap[type]) el(kpiMap[type]).classList.add('active-insp');
+
+  let formula='', values='', arithmetic='', result='', sub='';
+  const {tradPrice,h4uPrice,savings,savingsPct,pitiH4U,pitiTrad,appLevers} = calc;
+  const dti=val('dtiLimit'), rate=val('rateH4U'), dp=val('downPct'), tax=val('taxRate'), ins=val('insRate'), pmi=val('pmiRate');
+  const loan=h4uPrice*(1-dp/100);
+  const mr=rate/100/12;
+  const piAmt=mr===0?loan/360:loan*(mr*Math.pow(1+mr,360))/(Math.pow(1+mr,360)-1);
+  const taxAmt=h4uPrice*(tax/100)/12, insAmt=h4uPrice*(ins/100)/12, pmiAmt=dp<20?loan*(pmi/100)/12:0;
+  const mrFmt=(rate/100/12).toFixed(6);
+
+  if(type==='trad'){
+    formula=`Traditional Total\n= Land + Impact Fees + Horizontal + Vertical\n  + Construction Carry + Dev Profit\n  + Marketing + Contingency`;
+    const rows=[['Land Acquisition',calc.land,'Cost Breakdown'],['Impact Fees',calc.impactFees,'City Fees tab'],['Horizontal Dev.',calc.horizontal,'Cost Breakdown'],['Vertical Construction',calc.vertical,'Cost Breakdown'],['Construction Carry',calc.carryTotal,'Calculated'],['Dev G&A + Profit',calc.mgmtAmt,'Calculated'],['Marketing + Realtor',calc.mktAmt+calc.realtorAmt,'Calculated'],['Contingency',calc.contAmt,'Calculated']];
+    values=rows.map(([l,v,s])=>`<div class="insp-row"><span class="insp-row-label">${l}<span class="insp-row-source">${s}</span></span><span class="insp-row-val">${fmt(v)}</span></div>`).join('');
+    arithmetic=rows.map(([l,v])=>`${l.padEnd(22)} ${fmt(v)}`).join('\n')+`\n${'─'.repeat(38)}\nTRADITIONAL TOTAL      ${fmt(tradPrice)}`;
+    result=fmt(tradPrice); sub='per unit, all-in development cost';
+  }
+  else if(type==='h4u'){
+    const floor=tradPrice*0.40, raw=tradPrice-savings, active=raw<floor;
+    formula=`H4U Price = MAX(Traditional - Total Savings,\n             Traditional × 40%)\n\nThe 40% floor prevents levers from producing\nan unrealistically low price.`;
+    values=`<div class="insp-row"><span class="insp-row-label">Traditional Total<span class="insp-row-source">Cost stack</span></span><span class="insp-row-val">${fmt(tradPrice)}</span></div><div class="insp-row"><span class="insp-row-label">Total Lever Savings<span class="insp-row-source">Levers tab</span></span><span class="insp-row-val">${fmt(savings)}</span></div><div class="insp-row"><span class="insp-row-label">Raw H4U (Trad - Savings)<span class="insp-row-source">Calculated</span></span><span class="insp-row-val">${fmt(raw)}</span></div><div class="insp-row"><span class="insp-row-label">40% Price Floor<span class="insp-row-source">Trad × 40%</span></span><span class="insp-row-val">${fmt(floor)}</span></div><div class="insp-row"><span class="insp-row-label">Active Floor?<span class="insp-row-source">Raw &lt; Floor</span></span><span class="insp-row-val" style="color:${active?'var(--red)':'var(--green)'}">${active?'Yes':'No'}</span></div>`;
+    arithmetic=`Traditional Total     = ${fmt(tradPrice)}\nTotal Savings        = ${fmt(savings)}\nRaw H4U Price        = ${fmt(tradPrice)} - ${fmt(savings)}\n                     = ${fmt(raw)}\n40% Floor            = ${fmt(tradPrice)} × 40% = ${fmt(floor)}\nH4U Price            = MAX(${fmt(raw)}, ${fmt(floor)})\n                     = ${fmt(h4uPrice)}`;
+    result=fmt(h4uPrice); sub=active?'Price floor active':'Price is above the 40% safety floor ✓';
+  }
+  else if(type==='savings'){
+    formula=`Total Savings = Sum(Lever Savings for each lever)\n\nEach Lever Savings\n= Base Cost × Max Reduction % × Applied %`;
+    values=LEVER_DEFS.map(l=>`<div class="insp-row"><span class="insp-row-label">${l.label.substring(0,26)}<span class="insp-row-source">${levers[l.key]}% applied</span></span><span class="insp-row-val">${fmt(appLevers[l.key]||0)}</span></div>`).join('');
+    arithmetic=LEVER_DEFS.map(l=>`${l.label.substring(0,20).padEnd(22)} = ${fmt(appLevers[l.key]||0)}`).join('\n')+`\n${'─'.repeat(38)}\nTotal Savings          ${fmt(savings)}\n(${pct(savingsPct)} reduction)`;
+    result=fmt(savings); sub=pct(savingsPct)+' reduction from traditional price';
+  }
+  else if(type==='piti'){
+    formula=`PITI = Principal & Interest + Tax/mo\n     + Insurance/mo + PMI/mo\n\nPI = Loan × [r(1+r)^n] / [(1+r)^n - 1]\nwhere r = monthly rate, n = 360 months`;
+    values=`<div class="insp-row"><span class="insp-row-label">H4U Price<span class="insp-row-source">Calculated</span></span><span class="insp-row-val">${fmt(h4uPrice)}</span></div><div class="insp-row"><span class="insp-row-label">Down Payment<span class="insp-row-source">Setup tab</span></span><span class="insp-row-val">${dp}%</span></div><div class="insp-row"><span class="insp-row-label">Loan Amount<span class="insp-row-source">Price×(1-Down)</span></span><span class="insp-row-val">${fmt(loan)}</span></div><div class="insp-row"><span class="insp-row-label">Annual Rate (H4U)<span class="insp-row-source">Setup tab</span></span><span class="insp-row-val">${rate}%</span></div><div class="insp-row"><span class="insp-row-label">Monthly Rate r<span class="insp-row-source">Rate÷12÷100</span></span><span class="insp-row-val">${mrFmt}</span></div><div class="insp-row"><span class="insp-row-label">Term n<span class="insp-row-source">30 years</span></span><span class="insp-row-val">360 months</span></div><div class="insp-row"><span class="insp-row-label">Property Tax Rate<span class="insp-row-source">Setup tab</span></span><span class="insp-row-val">${tax}%/yr</span></div><div class="insp-row"><span class="insp-row-label">Insurance Rate<span class="insp-row-source">Setup tab</span></span><span class="insp-row-val">${ins}%/yr</span></div><div class="insp-row"><span class="insp-row-label">PMI Rate<span class="insp-row-source">LTV > 80%</span></span><span class="insp-row-val">${dp<20?pmi+'%/yr':'N/A (≥20% down)'}</span></div>`;
+    arithmetic=`Loan         = ${fmt(h4uPrice)} × (1 - ${dp}%)\n             = ${fmt(loan)}\n\nP&I          = ${fmt(loan)} × ${mrFmt}\n             = ${fmt(piAmt)}\n\nTax/mo       = ${fmt(h4uPrice)} × ${tax}% ÷ 12\n             = ${fmt(taxAmt)}\nIns/mo       = ${fmt(h4uPrice)} × ${ins}% ÷ 12\n             = ${fmt(insAmt)}\nPMI/mo       = ${dp<20?fmt(loan)+' × '+pmi+'% ÷ 12 = '+fmt(pmiAmt):'$0 (down ≥ 20%)'}\n\nPITI         = ${fmt(piAmt)} + ${fmt(taxAmt)} + ${fmt(insAmt)} + ${fmt(pmiAmt)}\n             = ${fmt(pitiH4U.total)}/mo`;
+    result=fmt(pitiH4U.total)+'/mo'; sub=`H4U rate ${rate}% · 30yr · ${dp}% down`;
+  }
+  else if(type==='income'){
+    const moIncome=pitiH4U.total/(dti/100), yrIncome=moIncome*12, tradYr=pitiTrad.total/(dti/100)*12;
+    formula=`Income Required = (PITI/mo ÷ DTI%) × 12\n\nDTI = max monthly housing payment as %\nof gross monthly income.\nFHA standard is 31%; conventional up to 43-45%.`;
+    values=`<div class="insp-row"><span class="insp-row-label">H4U PITI/month<span class="insp-row-source">Calculated</span></span><span class="insp-row-val">${fmt(pitiH4U.total)}/mo</span></div><div class="insp-row"><span class="insp-row-label">DTI Ratio<span class="insp-row-source">Setup tab</span></span><span class="insp-row-val">${dti}%</span></div><div class="insp-row"><span class="insp-row-label">Monthly Income Needed<span class="insp-row-source">PITI ÷ DTI</span></span><span class="insp-row-val">${fmt(moIncome)}/mo</span></div>`;
+    arithmetic=`PITI/month       = ${fmt(pitiH4U.total)}/mo\nDTI Ratio        = ${dti}% = ${(dti/100).toFixed(2)}\nMonthly income   = ${fmt(pitiH4U.total)} ÷ ${(dti/100).toFixed(2)}\n                 = ${fmt(moIncome)}/mo\n\nAnnual income    = ${fmt(moIncome)}/mo × 12\n                 = ${fmt(yrIncome)}/yr`;
+    result=fmt(yrIncome)+'/yr'; sub=`Traditional requires ${fmt(tradYr)}/yr — savings of ${fmt(tradYr-yrIncome)}/yr`;
+  }
+
+  el('insp-formula').textContent=formula;
+  el('insp-values').innerHTML=values;
+  el('insp-arithmetic').textContent=arithmetic;
+  el('insp-result-val').textContent=result;
+  el('insp-result-sub').textContent=sub;
+  el('inspector').classList.add('open');
+  el('inspector-overlay').classList.add('open');
+}
+
+function closeInspector(){
+  el('inspector').classList.remove('open');
+  el('inspector-overlay').classList.remove('open');
+  document.querySelectorAll('.topkpi').forEach(k=>k.classList.remove('active-insp'));
+  activeInspector=null;
+}
+
+// Fields: power, storm, water, irrigation, wastewater, safety, transportation, parks, fire, police
+const CITY_FEES = {
+  alpine:          {name:'Alpine',          verified:false, note:'Alpine City FY 2026 -- estimated breakdown',                              fees:{power:0,    storm:1000, water:2400, irrigation:1200, wastewater:4000,  safety:1200, transportation:2600, parks:2000,  fire:900,  police:900}},
+  american_fork:   {name:'American Fork',   verified:false, note:'American Fork City 2026 Fee Schedule -- estimated breakdown',             fees:{power:0,    storm:1200, water:2800, irrigation:1500, wastewater:5000,  safety:1500, transportation:3200, parks:3000,  fire:1100, police:1000}},
+  cedar_hills:     {name:'Cedar Hills',     verified:false, note:'Cedar Hills City FY 2026 -- estimated breakdown',                         fees:{power:0,    storm:950,  water:2300, irrigation:1100, wastewater:3800,  safety:1100, transportation:2400, parks:1900,  fire:850,  police:850}},
+  eagle_mountain:  {name:'Eagle Mountain',  verified:false, note:'Eagle Mountain Consolidated Fee Schedule, updated January 7, 2026',       fees:{power:0,    storm:1100, water:2800, irrigation:1400, wastewater:4200,  safety:1300, transportation:2800, parks:2500,  fire:900,  police:1400}},
+  highland:        {name:'Highland',        verified:false, note:'Highland City FY 2026 -- estimated breakdown',                            fees:{power:0,    storm:1100, water:2600, irrigation:1300, wastewater:4200,  safety:1400, transportation:2800, parks:2200,  fire:1000, police:1000}},
+  lehi:            {name:'Lehi',            verified:false, note:'Lehi City FY 2026 Budget -- estimated breakdown',                         fees:{power:0,    storm:800,  water:2000, irrigation:651,  wastewater:2060,  safety:1200, transportation:2500, parks:2000,  fire:1000, police:1389}},
+  lindon:          {name:'Lindon',          verified:false, note:'Lindon City FY 2026 -- estimated breakdown',                              fees:{power:0,    storm:900,  water:2200, irrigation:1000, wastewater:3600,  safety:1000, transportation:2200, parks:1800,  fire:800,  police:800}},
+  mapleton:        {name:'Mapleton',        verified:false, note:'Mapleton City FY 2026 -- estimated breakdown',                            fees:{power:0,    storm:900,  water:2200, irrigation:1000, wastewater:3800,  safety:1000, transportation:2000, parks:1500,  fire:700,  police:700}},
+  orem:            {name:'Orem',            verified:false, note:'Orem Impact Fee Study -- FY 2026 estimated breakdown',                    fees:{power:0,    storm:1000, water:2500, irrigation:0,    wastewater:4000,  safety:1500, transportation:2500, parks:2000,  fire:1200, police:1800}},
+  payson:          {name:'Payson',          verified:false, note:'Payson City fee schedule -- drinking water $778 verified; others estimated',fees:{power:0,   storm:1100, water:778,  irrigation:1200, wastewater:4500,  safety:1200, transportation:2500, parks:1500,  fire:600,  police:600}},
+  pleasant_grove:  {name:'Pleasant Grove',  verified:false, note:'Pleasant Grove FY 2026 Fee Schedule -- combined impact fees',             fees:{power:0,    storm:850,  water:2200, irrigation:1100, wastewater:3500,  safety:875,  transportation:1500, parks:994.19,fire:0,    police:0}},
+  provo:           {name:'Provo',           verified:false, note:'Provo Consolidated Fee Schedule, effective through June 30, 2026',        fees:{power:0,    storm:1100, water:2800, irrigation:0,    wastewater:4500,  safety:1800, transportation:3000, parks:2500,  fire:1200, police:1300}},
+  santaquin:       {name:'Santaquin',       verified:false, note:'Santaquin City FY 2026 -- estimated breakdown',                           fees:{power:0,    storm:800,  water:1800, irrigation:900,  wastewater:3500,  safety:900,  transportation:1800, parks:1200,  fire:600,  police:600}},
+  saratoga_springs:{name:'Saratoga Springs',verified:false, note:'Bowen & Collins Impact Fee Analysis, October 2025 -- sewer $1,489.55 verified',fees:{power:2200,storm:1300,water:3000,irrigation:1600,wastewater:1489.55,safety:1500,transportation:3500,parks:4000,fire:1500,police:910.45}},
+  spanish_fork:    {name:'Spanish Fork',    verified:true,  note:'Spanish Fork City Impact Fee Schedule, verified 2026',                   fees:{power:2136.90,storm:1253.21,water:2260.50,irrigation:1588.06,wastewater:5763.51,safety:1106.29,transportation:1992.92,parks:4896,fire:0,police:0}},
+  springville:     {name:'Springville',     verified:false, note:'Springville FY 2026 Comprehensive Fee Schedule -- estimated breakdown',   fees:{power:2500, storm:1400, water:3200, irrigation:1800, wastewater:7500,  safety:1800, transportation:3200, parks:2000,  fire:1000, police:1000}},
+  vineyard:        {name:'Vineyard',        verified:false, note:'Vineyard City FY 2026 -- estimated breakdown',                            fees:{power:0,    storm:1200, water:2800, irrigation:1400, wastewater:4500,  safety:1500, transportation:3000, parks:2800,  fire:1100, police:1100}},
+};
+
+const FEE_LABELS = [
+  {key:'power',         label:'Power / Electric'},
+  {key:'storm',         label:'Storm Water'},
+  {key:'water',         label:'Drinking Water'},
+  {key:'irrigation',    label:'Pressurized Irrigation'},
+  {key:'wastewater',    label:'Wastewater / Sewer'},
+  {key:'safety',        label:'Public Safety'},
+  {key:'transportation',label:'Transportation'},
+  {key:'parks',         label:'Parks / Recreation'},
+  {key:'fire',          label:'Fire'},
+  {key:'police',        label:'Police'},
+];
+
+// Working copy of current city fee inputs (editable in the table)
+let currentCityFees = {};
+
+function loadCity(){
+  const cityKey = el('city-select').value;
+  if(!cityKey) return;
+  const city = CITY_FEES[cityKey];
+  currentCityFees = {...city.fees};
+
+  // Note
+  const noteEl = el('city-source-note');
+  noteEl.innerHTML = city.verified
+    ? `<span style="color:var(--green)">&#10003; Verified: ${city.note}</span>`
+    : `<span style="color:var(--amber)">&#9651; Estimated: ${city.note}</span>`;
+
+  renderCityFeeTable();
+}
+
+function renderCityFeeTable(){
+  const tbody = el('city-fee-tbody');
+  tbody.innerHTML = FEE_LABELS.map((f,i) => {
+    const amt = currentCityFees[f.key] || 0;
+    return `<tr style="background:${i%2?'var(--surface2)':''}">
+      <td style="padding:9px 16px;color:var(--ink2)">${f.label}</td>
+      <td style="padding:9px 16px;text-align:right">
+        <input type="number" value="${amt}" step="0.01"
+          style="width:120px;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:4px 8px;font-family:'DM Mono',monospace;font-size:13px;text-align:right;outline:none"
+          oninput="currentCityFees['${f.key}']=parseFloat(this.value)||0;updateCityTotal()">
+      </td>
+      <td style="padding:9px 16px;color:var(--muted);font-size:12px"></td>
+    </tr>`;
+  }).join('');
+  updateCityTotal();
+}
+
+function updateCityTotal(){
+  const total = Object.values(currentCityFees).reduce((a,b)=>a+b,0);
+  el('city-fee-total').textContent = fmt(total);
+}
+
+function applyToModel(){
+  const cityKey = el('city-select').value;
+  if(!cityKey){alert('Please select a city first.');return;}
+
+  // Map city fee keys to cost line IDs
+  const keyMap = {
+    power:'fee_power', storm:'fee_storm', water:'fee_water',
+    irrigation:'fee_irrigation', wastewater:'fee_wastewater',
+    safety:'fee_safety', transportation:'fee_transportation',
+    parks:'fee_parks'
+    // fire and police not in current cost lines -- skip
+  };
+
+  Object.entries(keyMap).forEach(([cityKey_, costId])=>{
+    costs[costId] = currentCityFees[cityKey_] || 0;
+  });
+
+  recalc();
+
+  // Visual feedback
+  const btn = event.target;
+  const orig = btn.innerHTML;
+  btn.innerHTML = '&#10003; Applied!';
+  btn.style.background = 'var(--green)';
+  setTimeout(()=>{btn.innerHTML=orig;btn.style.background='var(--blue)';},2000);
+
+  // Switch to breakdown tab to show the updated numbers
+  switchTab('breakdown');
+}
+
+function updateCityCompareChart(){
+  const cityKeys = Object.keys(CITY_FEES);
+  const labels = cityKeys.map(k=>CITY_FEES[k].name);
+  const totals = cityKeys.map(k=>Object.values(CITY_FEES[k].fees).reduce((a,b)=>a+b,0));
+  const selectedCity = el('city-select').value;
+  const colors = cityKeys.map(k=>{
+    if(k===selectedCity) return '#34d399';
+    if(k==='spanish_fork') return '#7dd3fc';
+    return '#6b7280';
+  });
+
+  if(charts.cityCompare)charts.cityCompare.destroy();
+  charts.cityCompare = new Chart(el('chart-city-compare'),{
+    type:'bar',
+    data:{labels,datasets:[{data:totals,backgroundColor:colors,borderRadius:4}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+Math.round(v/1000)+'K'}}}}
+  });
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
