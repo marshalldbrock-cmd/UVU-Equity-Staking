@@ -353,7 +353,7 @@ input[type="range"]::-moz-range-track{height:6px;border-radius:3px;background:va
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:14px">
           <div class="field"><label>Total Units</label><div class="input-wrap"><input type="number" id="units" value="65" min="1" oninput="calcDensity();recalc()"></div><div class="field-note">Total homes in development</div></div>
           <div class="field"><label>Home Size (sq ft)</label><div class="input-wrap"><input type="number" id="homeSqft" value="1800" oninput="calcVertical()"></div></div>
-          <div class="field"><label>Cost per sq ft</label><div class="input-wrap"><span class="affix">$</span><input type="number" id="costPerSqft" value="165" step="5" oninput="calcVertical()"></div><div class="field-note">Vertical construction $/sqft</div></div>
+          <div class="field"><label>Cost per sq ft</label><div class="input-wrap"><span class="affix">$</span><input type="number" id="costPerSqft" value="145" step="5" oninput="calcVertical()"></div><div class="field-note">Vertical construction $/sqft</div></div>
           <div class="field"><label>Site Acreage</label><div class="input-wrap"><input type="number" id="siteAcreage" value="12.73" step="0.01" oninput="calcDensity();recalc()"></div></div>
           <div class="field"><label>Zoning Code</label>
             <select id="zoningCode" onchange="calcDensity();recalc()" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg);font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;cursor:pointer">
@@ -513,15 +513,30 @@ input[type="range"]::-moz-range-track{height:6px;border-radius:3px;background:va
       <div class="panel">
         <div class="panel-head">H4U Silent Second Lien</div>
         <div class="panel-body">
-          <div class="field">
-            <label>Silent Second Amount: <span id="ssLabel" style="color:var(--blue);font-family:'DM Mono',monospace;font-weight:700">$75,000</span></label>
-            <input type="range" id="silentSecond" min="75000" max="100000" step="1000" value="75000"
-              style="background:linear-gradient(to right,var(--gold) 0%,var(--gold) 0%,var(--border) 0%,var(--border) 100%)"
-              oninput="this.style.background='linear-gradient(to right,var(--gold) 0%,var(--gold) '+Math.round((+this.value-75000)/25000*100)+'%,var(--border) '+Math.round((+this.value-75000)/25000*100)+'%,var(--border) 100%)';el('ssLabel').textContent='$'+(+this.value).toLocaleString();recalc()">
-            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:3px"><span>$75,000</span><span>$100,000</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+            <div style="background:var(--surface2);border-radius:8px;padding:10px 12px">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">Silent Second (Gap)</div>
+              <div style="font-size:18px;font-weight:700;color:var(--blue);font-family:'DM Mono',monospace" id="ss-display-amt">--</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">Market Value minus H4U Price</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:8px;padding:10px 12px">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">Buyer LTV</div>
+              <div style="font-size:18px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace" id="ss-display-ltv">--</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">H4U Price / Market Value</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:8px;padding:10px 12px">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">Instant Equity (Day 1)</div>
+              <div style="font-size:18px;font-weight:700;color:var(--gold);font-family:'DM Mono',monospace" id="ss-display-equity">--</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">Gap between market and loan</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:8px;padding:10px 12px">
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">PMI Required?</div>
+              <div style="font-size:18px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace" id="ss-display-pmi">No</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">LTV under 80% = no PMI</div>
+            </div>
           </div>
           <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:6px;padding:8px 12px;font-size:11px;color:var(--blue)">
-            H4U funded &middot; 0% interest &middot; due on sale or refi &middot; subordinated to first mortgage
+            The savings IS the silent second. Buyer borrows only the H4U price. The bank sees full market value as collateral, so the buyer starts with instant equity and qualifies without PMI or a large down payment.
           </div>
         </div>
       </div>
@@ -843,7 +858,7 @@ const LEVER_DEFS = [
   {key:'option',    label:'Option Agreement -- Eliminate Land Carry', pb:'PB 1.0',  desc:'Option controls land without purchase during entitlement -- eliminates interest on $4.2M land cost for the full entitlement period',
    maxFn:c=>(c.land*(c.ltv_||65)/100*(c.entitleRate_||8.5)/100*(c.entitleMo||12)/12)+(c.totalEntitleCarry||0), defaultPct:90},
   {key:'impactFeeWaiver', label:'Impact Fee Waiver',             pb:'PB 4.0',       desc:'City permanently waives impact fees for H4U workforce housing -- full fee value eliminated from project cost',
-   maxFn:c=>c.impactFees, defaultPct:0},
+   maxFn:c=>c.impactFees, defaultPct:100},
   {key:'impactFeeDefer',  label:'Impact Fee Deferral',           pb:'PB 4.0',       desc:'City defers impact fees to closing -- buyer still pays fees but H4U avoids tying up cash during construction, saving carry cost only',
    maxFn:c=>c.impactFees*(c.cpd||0), defaultPct:100},
   {key:'bulk',      label:'Bulk Purchasing (Sunroc, Burton...)', pb:'PB 5.0',       desc:'Master supply agreements: 5-15% material cost reduction vs. one-off purchases',
@@ -885,7 +900,7 @@ function setSS(cls,msg){const e=el('save-status');e.className='save-status '+(cl
 
 // -- SAVE / LOAD FILE ----------------------------------------------------------
 function saveFile(){
-  const data={costs,levers,settings:{units:val('units'),salePrice:val('salePrice'),homeSqft:val('homeSqft'),costPerSqft:val('costPerSqft'),rateTraditional:val('rateTraditional'),rateH4U:val('rateH4U'),downPct:val('downPct'),taxRate:val('taxRate'),insRate:val('insRate'),pmiRate:val('pmiRate'),dtiLimit:val('dtiLimit'),constRate:val('constRate'),constMonths:val('constMonths'),ltv:val('ltv'),pctCont:val('pctCont'),pctDevFee:val('pctDevFee'),pctBuilderFee:val('pctBuilderFee'),pctStdDesign:val('pctStdDesign'),pctMkt:val('pctMkt'),pctRealtor:val('pctRealtor'),entitleMonths:val('entitleMonths'),entitleRate:val('entitleRate'),silentSecond:parseFloat(el('silentSecond').value)||75000}};
+  const data={costs,levers,settings:{units:val('units'),salePrice:val('salePrice'),homeSqft:val('homeSqft'),costPerSqft:val('costPerSqft'),rateTraditional:val('rateTraditional'),rateH4U:val('rateH4U'),downPct:val('downPct'),taxRate:val('taxRate'),insRate:val('insRate'),pmiRate:val('pmiRate'),dtiLimit:val('dtiLimit'),constRate:val('constRate'),constMonths:val('constMonths'),ltv:val('ltv'),pctCont:val('pctCont'),pctDevFee:val('pctDevFee'),pctBuilderFee:val('pctBuilderFee'),pctStdDesign:val('pctStdDesign'),pctMkt:val('pctMkt'),pctRealtor:val('pctRealtor'),entitleMonths:val('entitleMonths'),entitleRate:val('entitleRate')}};
   const a=document.createElement('a');a.href='data:application/json,'+encodeURIComponent(JSON.stringify(data,null,2));a.download='h4u-scenario.json';a.click();
 }
 function loadFile(){el('file-input').click();}
@@ -896,7 +911,7 @@ function onFileLoad(e){
       const d=JSON.parse(ev.target.result);
       if(d.costs)Object.assign(costs,d.costs);
       if(d.levers)Object.assign(levers,d.levers);
-      if(d.settings){const s=d.settings;['units','salePrice','homeSqft','costPerSqft','rateTraditional','rateH4U','downPct','taxRate','insRate','pmiRate','dtiLimit','constRate','constMonths','ltv','pctCont','pctDevFee','pctBuilderFee','pctStdDesign','pctMkt','pctRealtor','entitleMonths','entitleRate'].forEach(k=>{if(s[k]!==undefined&&el(k))el(k).value=s[k];});if(s.silentSecond){el('silentSecond').value=s.silentSecond;el('ssLabel').textContent='$'+Math.round(s.silentSecond).toLocaleString();}}
+      if(d.settings){const s=d.settings;['units','salePrice','homeSqft','costPerSqft','rateTraditional','rateH4U','downPct','taxRate','insRate','pmiRate','dtiLimit','constRate','constMonths','ltv','pctCont','pctDevFee','pctBuilderFee','pctStdDesign','pctMkt','pctRealtor','entitleMonths','entitleRate'].forEach(k=>{if(s[k]!==undefined&&el(k))el(k).value=s[k];});}
       recalc();setSS('saved','scenario loaded');setTimeout(()=>setSS('',''),2000);
     }catch(err){setSS('error','invalid file');}
   };r.readAsText(f);
@@ -925,6 +940,37 @@ function applyAllLevers(){LEVER_DEFS.forEach(l=>{levers[l.key]=100;const s=el('s
 function resetLevers(){LEVER_DEFS.forEach(l=>{levers[l.key]=0;const s=el('sldr_'+l.key);if(s)s.value=0;});recalc();}
 function restoreLevers(){LEVER_DEFS.forEach(l=>{levers[l.key]=l.defaultPct;const s=el('sldr_'+l.key);if(s)s.value=l.defaultPct;});recalc();}
 
+function snapLever(key, defaultPct){
+  const ldef = LEVER_DEFS.find(l=>l.key===key);
+  if(!ldef) return;
+  const col = LEVER_DEFS.indexOf(ldef);
+  const isSnapped = levers[key] === defaultPct && defaultPct > 0;
+  // Toggle: if already at default, reset to 0; otherwise snap to default
+  const newVal = isSnapped ? 0 : defaultPct;
+  levers[key] = newVal;
+  const sldr = el('sldr_'+key);
+  if(sldr){
+    sldr.value = newVal;
+    // Find the accent color for this lever's gradient
+    const COLORS = [
+      '#2563EB','#16A34A','#EA580C','#A16207','#7C3AED','#0891B2','#CA8A04','#DC2626','#0D9488','#9333EA','#C8922A','#4F46E5'
+    ];
+    const accent = COLORS[col] || 'var(--gold)';
+    sldr.style.background=`linear-gradient(to right,${accent} 0%,${accent} ${newVal}%,var(--border) ${newVal}%,var(--border) 100%)`;
+  }
+  const pctEl = el('lpct_'+key);
+  if(pctEl) pctEl.textContent = newVal+'%';
+  recalc();
+}
+
+function updateSnapBtn(key, defaultPct){
+  // Called when slider is manually dragged — update button label to reflect state
+  const btn = el('snap_'+key);
+  if(!btn) return;
+  const isSnapped = levers[key] === defaultPct && defaultPct > 0;
+  btn.textContent = isSnapped ? 'Reset' : 'Apply '+defaultPct+'%';
+}
+
 function toggleDefer(id){DEFER[id]=!DEFER[id];recalc();}
 
 // -- PITI CALC -----------------------------------------------------------------
@@ -946,19 +992,17 @@ function maxAffordable(income,rate,dp,tax,ins,pmi,dti){
   const pmiC=dp<20?(pmi/100)*(1-dp/100)/12:0;
   return mb/(piC*(1-dp/100)+taxC+insC+pmiC*(1-dp/100));
 }
-// Max affordable HOME PRICE when a silent second (ssAmt) covers part of the purchase.
-// The buyer's mortgage is (price - ssAmt), so we solve for price given that constraint.
+// Max affordable H4U price given income.
+// Buyer borrows h4uPrice (the full H4U price). No PMI because bank LTV = h4uPrice/tradPrice < 80%.
+// ssAmt parameter kept for signature compatibility but not used in loan calc.
 function maxAffordableWithSS(income,rate,dp,tax,ins,pmi,dti,ssAmt){
   const mb=income*(dti/100)/12;
   const r=rate/100/12;const n=360;
   const piC=r===0?1/n:r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
   const taxC=(tax/100)/12;const insC=(ins/100)/12;
-  // Loan = price - ssAmt (silent second covers the gap, not subject to down payment logic here)
-  // PITI = (price - ssAmt)*piC + price*taxC + price*insC <= mb
-  // price*(piC + taxC + insC) - ssAmt*piC <= mb
-  // price <= (mb + ssAmt*piC) / (piC + taxC + insC)
-  const pmiC=dp<20?(pmi/100)/12:0; // simplified PMI on full price for conservatism
-  return (mb + ssAmt*piC) / (piC + taxC + insC + pmiC);
+  // No PMI: bank underwrites against market value, buyer LTV is well under 80%
+  // PITI = price * (piC*(1-dp/100) + taxC + insC) <= mb
+  return mb / (piC*(1-dp/100) + taxC + insC);
 }
 
 // -- BUILD LEVERS UI -----------------------------------------------------------
@@ -991,6 +1035,7 @@ function buildLeversUI(calc){
     const div=document.createElement('div');
     div.className='lever-card';
     div.style.border=`1px solid ${col.border}`;
+    const isSnapped = levers[l.key] === l.defaultPct && l.defaultPct > 0;
     div.innerHTML=`
       <div class="lever-header">
         <div class="lever-num" style="background:${col.bg};width:60px">${i+1}</div>
@@ -999,17 +1044,24 @@ function buildLeversUI(calc){
           <div class="lever-desc">${l.desc}</div>
           <div class="lever-pb" style="background:${col.light};color:${col.accent};border:1px solid ${col.border}">${l.pb}</div>
         </div>
-        <div class="lever-savings-block" style="background:${col.light};cursor:pointer" onclick="openInspector('lever_${l.key}')" title="Click to see calculation">
-          <div style="font-size:10px;color:${col.accent};font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:3px">SAVINGS</div>
+        <div class="lever-savings-block" style="background:${col.light};cursor:default">
+          <div style="font-size:10px;color:${col.accent};font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:3px;display:flex;align-items:center;gap:6px">
+            SAVINGS
+            <span style="font-size:10px;font-weight:400;opacity:0.6;cursor:pointer;text-decoration:underline;text-transform:none;letter-spacing:0" onclick="openInspector('lever_${l.key}')" title="See calculation">details</span>
+          </div>
           <div class="lever-savings" style="color:${col.accent}" id="lsav_${l.key}">${fmt(appliedSav)}</div>
           <div class="lever-max" id="lmax_${l.key}">Max: ${fmt(maxSav)}</div>
+          <button id="snap_${l.key}" onclick="snapLever('${l.key}',${l.defaultPct})"
+            style="margin-top:8px;width:100%;padding:5px 0;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;letter-spacing:0.2px;background:${isSnapped?'var(--surface2)':col.bg};color:${isSnapped?col.accent:'#fff'};border:1px solid ${isSnapped?col.border:'transparent'}">
+            ${isSnapped ? 'Reset' : 'Apply ' + l.defaultPct + '%'}
+          </button>
         </div>
       </div>
       <div class="lever-body">
         <div class="lever-controls">
           <input type="range" min="0" max="100" value="${pctVal}" id="sldr_${l.key}"
             style="flex:1;--thumb-color:${col.accent};background:linear-gradient(to right,${col.accent} 0%,${col.accent} ${levers[l.key]}%,var(--border) ${levers[l.key]}%,var(--border) 100%)"
-            oninput="levers['${l.key}']=+this.value;el('lpct_${l.key}').textContent=this.value+'%';this.style.background='linear-gradient(to right,${col.accent} 0%,${col.accent} '+this.value+'%,var(--border) '+this.value+'%,var(--border) 100%)';debouncedLeverRecalc()">
+            oninput="levers['${l.key}']=+this.value;el('lpct_${l.key}').textContent=this.value+'%';this.style.background='linear-gradient(to right,${col.accent} 0%,${col.accent} '+this.value+'%,var(--border) '+this.value+'%,var(--border) 100%)';updateSnapBtn('${l.key}',${l.defaultPct});debouncedLeverRecalc()">
           <div class="lever-pct" id="lpct_${l.key}"
             style="background:${col.light};color:${col.accent};border:1px solid ${col.border}">${pctVal}%</div>
         </div>
@@ -1319,7 +1371,8 @@ function recalc(){
   const pctRealtor_= val('pctRealtor');
   const entitleMo  = val('entitleMonths');
   const entitleRate_= val('entitleRate');
-  const ssAmt      = parseFloat(el('silentSecond').value)||75000;
+  // ssAmt is dynamic: the gap between market value and what the buyer actually borrows
+  // Calculated after h4uPrice is known below
 
   if(el('unitsSlider'))el('unitsSlider').value=units;
 
@@ -1386,12 +1439,13 @@ function recalc(){
   const priceFloor  = tradPrice * 0.40;
   const h4uRaw      = tradPrice - totalLeverSavings;
   const h4uPrice    = Math.max(h4uRaw, priceFloor);
-  const firstMortgage = Math.max(0, h4uPrice - ssAmt);
+  const ssAmt       = Math.max(0, tradPrice - h4uPrice);  // gap = silent second benefit
+  const firstMortgage = h4uPrice;  // buyer's loan IS the H4U price
 
   // PITI
-  const pitiTrad = pitiCalc(tradPrice,   rateTrad,  downPct_,taxRate_,insRate_,pmiRate_,dtiLimit_);
-  const pitiH4U  = pitiCalc(h4uPrice,    rateH4U_,  downPct_,taxRate_,insRate_,pmiRate_,dtiLimit_);
-  const pitiSS   = pitiCalc(firstMortgage,rateH4U_, downPct_,taxRate_,insRate_,pmiRate_,dtiLimit_);
+  const pitiTrad = pitiCalc(tradPrice,  rateTrad,  downPct_,taxRate_,insRate_,pmiRate_,dtiLimit_);
+  const pitiH4U  = pitiCalc(h4uPrice,  rateH4U_,  downPct_,taxRate_,insRate_,pmiRate_,dtiLimit_);
+  const pitiSS   = pitiCalc(h4uPrice,  rateH4U_,  downPct_,taxRate_,insRate_,0,       dtiLimit_); // no PMI: LTV is h4uPrice/tradPrice
 
   const savings     = tradPrice - h4uPrice;
   const savingsPct  = tradPrice>0 ? savings/tradPrice : 0;
@@ -1408,6 +1462,13 @@ function recalc(){
   el('tk-savings').textContent = fmt(savings);
   el('tk-piti').textContent  = fmt(pitiSS.total)+'/mo';
   el('tk-income').textContent = fmt(pitiSS.incomeReq);
+
+  // -- SILENT SECOND DISPLAY BOXES --
+  const buyerLTV = tradPrice > 0 ? (h4uPrice / tradPrice) : 0;
+  if(el('ss-display-amt'))    el('ss-display-amt').textContent    = fmt(ssAmt);
+  if(el('ss-display-ltv'))    el('ss-display-ltv').textContent    = Math.round(buyerLTV*100)+'%';
+  if(el('ss-display-equity')) el('ss-display-equity').textContent = fmt(ssAmt);
+  if(el('ss-display-pmi'))  { el('ss-display-pmi').textContent    = buyerLTV <= 0.80 ? 'No' : 'Yes'; el('ss-display-pmi').style.color = buyerLTV <= 0.80 ? 'var(--green)' : 'var(--red)'; }
 
   // -- SETUP TAB --
   syncSetupCostTable({units,carryTotal:totalCarry,mgmtAmt:devFeeAmt,builderFeeAmt,mktAmt,realtorAmt,contAmt,tradPrice});
@@ -1444,8 +1505,10 @@ function recalc(){
     const near=!canH4U&&(h4uPrice-mx)/h4uPrice<0.05;
     const tradBadge=canTrad?`<span class="yes-badge">&#10003; Yes</span>`:`<span class="no-badge">&#10007; No</span>`;
     const h4uBadge=canH4U?`<span class="yes-badge">&#10003; Yes</span>`:near?`<span class="near-badge">&#9651; Near</span>`:`<span class="no-badge">&#10007; No</span>`;
-    const moPiti=pitiCalc(firstMortgage,rateH4U_,downPct_,taxRate_,insRate_,pmiRate_,dtiLimit_);
-    const moSavings=pitiTrad.total-moPiti.total;
+    // PITI computed at H4U price (buyer's loan); no PMI since LTV = h4uPrice/tradPrice is under 80%
+    const moPiti=pitiCalc(h4uPrice,rateH4U_,downPct_,taxRate_,insRate_,0,dtiLimit_);
+    const pitiTradRow=pitiCalc(tradPrice,rateTrad,downPct_,taxRate_,insRate_,pmiRate_,dtiLimit_);
+    const moSavings=pitiTradRow.total-moPiti.total;
     const isTarget=inc>=100000&&inc<=150000;
     return`<tr${isTarget?' class="target"':''}><td style="font-weight:${isTarget?'700':'400'}">${fmt(inc)}</td><td>${fmt(mx)}</td><td>${fmt(tradPrice)}</td><td>${tradBadge}</td><td>${fmt(h4uPrice)}</td><td>${h4uBadge}</td><td>${fmt(moPiti.total)}/mo</td><td class="savings-green">${fmt(moSavings)}/mo</td></tr>`;
   }).join('');
